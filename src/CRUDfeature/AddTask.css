@@ -1,0 +1,157 @@
+.modal-container {
+  position: relative;
+  background-color: #111;
+  color: white;
+  padding: 2rem;
+  border-radius: 12px;
+  width: 400px;
+  max-width: 90%;
+  max-height: 90vh;     
+  overflow-y: auto;              
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+
+.modal-container {
+  position: relative;
+  background-color: #111;
+  color: white;
+  padding: 2rem;
+  border-radius: 12px;
+  width: 400px;
+  max-width: 90%;
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+
+.modal-close-btn {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  background: transparent;
+  border: none;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+  color: white;
+  transition: color 0.2s ease;
+}
+
+.modal-close-btn:hover {
+  color: red;
+}
+
+
+h2 {
+  margin-bottom: 1rem;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  margin-bottom: 0.5rem;
+  text-align: left;
+}
+
+input[type="text"],
+input[type="date"],
+textarea {
+  padding: 0.5rem;
+  border: 1px solid #555;
+  border-radius: 6px;
+  background: #222;
+  color: white;
+}
+
+textarea {
+  resize: vertical;
+}
+
+.priority-options {
+  display: flex;
+  gap: 1rem;
+}
+
+.add-subtask-btn {
+  background: #444;
+  color: white;
+  display: flex;
+  padding: 0.5rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.cancel-btn {
+  background: transparent;
+  color: white;
+  border: 1px solid white;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.create-btn {
+  background: white;
+  color: black;
+  border: none;
+  display: flex;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+.subtask-input {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.subtask-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  margin: 5px 0;
+  border-radius: 6px;
+  color: white;
+  
+}
+
+.subtask-item input[type="checkbox"] {
+  margin-right: 10px;
+}
+
+.delete-subtask-btn {
+  background: red;
+  color: white;
+  padding: 4px 8px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.delete-subtask-btn:hover {
+  background: darkred;
+}
+
+.cursor-grab {
+  cursor: grab;
+}
+.cursor-grab:active {
+  cursor: grabbing;
+}
+
+
+
+
+

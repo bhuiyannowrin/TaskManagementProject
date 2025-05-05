@@ -1,0 +1,252 @@
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+    font-family: 'Segoe UI', sans-serif;
+  }
+  
+  .modal-content {
+    background-color: #0d1117;
+    color: #ffffff;
+    width: 90%;
+    max-width: 700px;
+    border-radius: 12px;
+    padding: 2rem;
+    position: relative;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
+  }
+  
+  .close-btn {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 1.25rem;
+    background: none;
+    border: none;
+    color: #ffffff;
+    cursor: pointer;
+  }
+
+  .edit-btn {
+    position: absolute;
+    top: 3.5rem;
+    right: 1rem;
+    font-size: 1.25rem;
+    background: none;
+    border: none;
+    color: #ffffff;
+    cursor: pointer;
+  }
+  
+  .priority-badge {
+    display: inline-block;
+    background-color: #3b82f6;
+    color: white;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    margin-bottom: 1rem;
+  }
+  
+  .task-title {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .tab-header {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .tab {
+    background: #1c2128;
+    border: none;
+    padding: 0.6rem 1rem;
+    color: #c9d1d9;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 500;
+  }
+  
+  .tab.active {
+    background: #30363d;
+    color: white;
+  }
+  
+  .badge {
+    background: whitesmoke;
+    color: black;
+    font-size: 0.75rem;
+    padding: 2px 6px;
+    border-radius: 999px;
+    margin-left: 0.5rem;
+  }
+  
+  .meta-info {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+    color: #8b949e;
+    font-size: 0.85rem;
+    margin-bottom: 1.5rem;
+    align-items: center;
+  }
+  
+  .meta-info span {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
+  
+  .description {
+    margin-bottom: 1.5rem;
+  }
+  
+  .description strong {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #ffffff;
+  }
+  
+  .description p {
+    color: #c9d1d9;
+  }
+  
+  .progress-section {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .progress-slider {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 6px;
+    border-radius: 5px;
+    background: linear-gradient(to right, #4caf50 0%, #4caf50 var(--value, 0%), #ccc var(--value, 0%), #ccc 100%);
+    outline: none;
+    transition: background 0.3s ease;
+  }
+  
+ 
+  .progress-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #4caf50;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+  
+  .progress-slider::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #4caf50;
+    cursor: pointer;
+  }
+  
+  
+  .tags {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+  
+  .tag {
+    background: #21262d;
+    color: #c9d1d9;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+  }
+
+  .upload-label {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: #8e8a8a;
+    border: 1px dashed #ccc;
+    cursor: pointer;
+    margin-top: 1rem;
+    text-align: center;
+  }
+  
+  .file-drop-zone {
+    border: 2px dashed #aaa;
+    padding: 20px;
+    margin-top: 10px;
+    text-align: center;
+  }
+  .comment-input-section {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+  }
+  
+  .comment-textarea {
+    resize: none;
+    padding: 10px;
+    font-size: 14px;
+    margin-bottom: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+  
+  .add-comment-btn {
+    align-self: flex-end;
+    padding: 6px 12px;
+    background-color: white;
+    color: black;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .comment {
+    margin-bottom: 15px;
+    padding: 10px;
+    background-color: none;
+    text-align: left;
+    border-radius: 4px;
+    border: 1px solid #ffffff;
+  }
+  
+  .comment-author {
+    font-weight: bold;
+  }
+  
+  .comment-date {
+    font-size: 12px;
+    color: #e4dbdb;
+    margin-bottom: 4px;
+  }
+  
+  .attachment-heading {
+    text-align: left;
+    margin: 10px 0;
+  }
+  
+  .file-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-left: 4px solid #4a90e2;
+    padding: 10px;
+    margin-bottom: 8px;
+    background-color: #f9f9f9;
+  }
+  
+  .file-name {
+    flex: 1;
+    font-size: 14px;
+  }
+  
+  
