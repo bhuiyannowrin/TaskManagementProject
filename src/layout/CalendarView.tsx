@@ -31,14 +31,16 @@ function CalendarView({ tasks }) {
     days.push(new Date(selectedDate.getFullYear(), selectedDate.getMonth(), i));
   }
 
-  const formatDate = (date) =>
+  
+  const getISODate = (date) => date.toLocaleDateString('en-CA');
+
+
+  const formatDisplayDate = (date) =>
     date.toLocaleDateString('en-US', {
       year: 'numeric',
-      month: 'long',
-      day: 'numeric',
+      month: 'short',
+      day: '2-digit',
     });
-
-  const getFormattedISO = (date) => date.toISOString().split('T')[0];
 
   const handleDateClick = (date) => {
     setActiveDate(date);
@@ -46,7 +48,7 @@ function CalendarView({ tasks }) {
 
   const tasksForSelectedDay = activeDate
     ? tasks.filter(
-        (task) => getFormattedISO(new Date(task.dueDate)) === getFormattedISO(activeDate)
+        (task) => getISODate(new Date(task.dueDate)) === getISODate(activeDate)
       )
     : [];
 
@@ -61,7 +63,7 @@ function CalendarView({ tasks }) {
               )
             }
           >
-            <FcPrevious/>
+            <FcPrevious />
           </button>
           <h3>
             {selectedDate.toLocaleString('default', { month: 'long' })}{' '}
@@ -74,7 +76,7 @@ function CalendarView({ tasks }) {
               )
             }
           >
-            <FcNext/>
+            <FcNext />
           </button>
         </div>
 
@@ -121,20 +123,24 @@ function CalendarView({ tasks }) {
         </div>
       </div>
 
-      <div className="task-sidebar" style={{ flex: 1 }}>
+      <div className="task-sidebar">
         {activeDate ? (
           <>
             {tasksForSelectedDay.length > 0 ? (
               <ul>
                 {tasksForSelectedDay.map((task) => (
-                  <li key={task.id}>
-                    <strong>{task.title}</strong> – {task.status}
+                  <>
+                  <li key={task.id} style={{ marginBottom: '1rem' }}>
+                    <div><strong>{formatDisplayDate(new Date(task.dueDate))}</strong></div>
                   </li>
+                  <div><strong>{task.title}</strong></div>
+                  <p>{task.description}</p>
+                  </>
                 ))}
               </ul>
             ) : (
               <p>
-                {formatDate(activeDate)}
+                {formatDisplayDate(activeDate)}
                 <br />
                 No tasks due on this date.
               </p>
