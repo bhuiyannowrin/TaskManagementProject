@@ -87,11 +87,7 @@ export default function BoardView({
                   }}
                 >
                   <button
-                    className="priority-button"
-                    style={{
-                      backgroundColor:
-                        priorityColors[task.priority.toLowerCase()],
-                    }}
+                    className={`priority-button ${task.priority.toLowerCase()}`}
                   >
                     {task.priority} Priority
                   </button>

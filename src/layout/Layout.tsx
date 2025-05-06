@@ -9,7 +9,7 @@ import AddTask from "../CRUDfeature/AddTask";
 import { taskFilter, taskSort } from "./Types";
 import BoardView from "./BoardView";
 import ListView from "./ListView";
-import CalendarView from "./CalenderView";
+import CalendarView from "./CalendarView";
 import TaskDetailModal from "./TaskDetailModal";
 import EditTask from "../CRUDfeature/EditTask";
 
