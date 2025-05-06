@@ -15,10 +15,16 @@ import EditTask from "../CRUDfeature/EditTask";
 
 export default function Layout() {
   const [tasks, setTasks] = useState(() => {
-    const savedTasks = localStorage.getItem("tasks");
-    return savedTasks ? JSON.parse(savedTasks) : [];
+    const saved = localStorage.getItem("tasks");
+    return saved ? JSON.parse(saved) : [];
   });
 
+  const [notifications, setNotifications] = useState(() => {
+    const saved = localStorage.getItem("notifications");
+    return saved ? JSON.parse(saved) : [];
+  });
+
+  const [showNotifications, setShowNotifications] = useState(false);
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [view, setView] = useState("board");
   const [searchTerm, setSearchTerm] = useState("");
@@ -30,16 +36,63 @@ export default function Layout() {
   const [selectedTask, setSelectedTask] = useState(null);
   const [editTaskId, setEditTaskId] = useState<string | null>(null);
 
-  const addTask = (task) => {
-    setTasks((prevTasks) => [
-      ...prevTasks,
-      { ...task, updatedAt: new Date().toISOString() },
-    ]);
-  };
-
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
   }, [tasks]);
+
+  useEffect(() => {
+    localStorage.setItem("notifications", JSON.stringify(notifications));
+  }, [notifications]);
+
+  const pushNotification = (msg: string) => {
+    setNotifications((prev) => [msg, ...prev]);
+  };
+
+  const addTask = (task) => {
+    const newTask = { ...task, updatedAt: new Date().toISOString() };
+    setTasks((prevTasks) => [...prevTasks, newTask]);
+    pushNotification(`You added new task: "${task.title}"`);
+  };
+
+  const updateTask = (updatedTask) => {
+    setTasks((prevTasks) =>
+      prevTasks.map((t) => (t.id === updatedTask.id ? updatedTask : t))
+    );
+    pushNotification(`You edited task: "${updatedTask.title}"`);
+  };
+
+  const handleThreeDotsClick = (taskId: string) => {
+    setOpenTaskMenuId((prevId) => (prevId === taskId ? null : taskId));
+  };
+
+  const handleThreeDotsOptionClick = (option: string, taskId: string) => {
+    const task = tasks.find((t) => t.id === taskId);
+
+    if (option === "Edit" || option === "Add Subtask") {
+      setEditTaskId(taskId);
+    }
+
+    if (option === "Duplicate") {
+      if (!task) return;
+      const newTask = {
+        ...task,
+        id: Date.now().toString(),
+        title: task.title + " (Copy)",
+        updatedAt: new Date().toISOString(),
+      };
+      setTasks((prev) => [...prev, newTask]);
+      pushNotification(`You duplicated task: "${task.title}"`);
+    }
+
+    if (option === "Delete") {
+      if (task) {
+        pushNotification(`You deleted task: "${task.title}"`);
+        setTasks((prevTasks) => prevTasks.filter((t) => t.id !== taskId));
+      }
+    }
+
+    setOpenTaskMenuId(null);
+  };
 
   const filteredTasks = tasks
     .filter((t) => t.title.toLowerCase().includes(searchTerm.toLowerCase()))
@@ -77,50 +130,11 @@ export default function Layout() {
     return 0;
   });
 
-  const handleThreeDotsClick = (taskId: string) => {
-    setOpenTaskMenuId((prevId) => (prevId === taskId ? null : taskId));
-  };
-
-  const handleThreeDotsOptionClick = (option: string, taskId: string) => {
-    if (option === "Edit" || option === "Add Subtask") {
-      setEditTaskId(taskId);
-    }
-
-    if (option === "Duplicate") {
-      setTasks((prevTasks) => {
-        const taskToDuplicate = prevTasks.find((t) => t.id === taskId);
-        if (!taskToDuplicate) return prevTasks;
-
-        const newTask = {
-          ...taskToDuplicate,
-          id: Date.now().toString(),
-          title: taskToDuplicate.title + " (Copy)",
-          updatedAt: new Date().toISOString(),
-        };
-
-        return [...prevTasks, newTask];
-      });
-    }
-
-    if (option === "Delete") {
-      setTasks((prevTasks) => prevTasks.filter((t) => t.id !== taskId));
-    }
-
-    setOpenTaskMenuId(null);
-  };
-
-  const updateTask = (updatedTask) => {
-    setTasks((prevTasks) =>
-      prevTasks.map((t) => (t.id === updatedTask.id ? updatedTask : t))
-    );
-  };
-
   return (
     <div className="app-container">
       <div className="app-header">
         <div className="header-top">
           <h1 className="logo">TaskMaster</h1>
-
           <div className="header-right">
             <input
               type="text"
@@ -129,13 +143,48 @@ export default function Layout() {
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
-
             <button className="icon-btn">
               <DarkLightSwitch />
             </button>
-            <button className="icon-btn">
-              <BiBell />
-            </button>
+            <div className="notification-wrapper">
+              <button
+                className="icon-btn"
+                onClick={() => setShowNotifications((prev) => !prev)}
+                style={{ position: "relative" }}
+              >
+                <BiBell />
+                {notifications.length > 0 && (
+                  <span className="badge">{notifications.length}</span>
+                )}
+              </button>
+
+              {showNotifications && (
+                <div className="notification-panel">
+                  <h4>Notifications</h4>
+                  <ul>
+                    {notifications.map((msg, i) => {
+                      let backgroundColor = "lightgray";
+
+                      if (msg.toLowerCase().includes("add")) {
+                        backgroundColor = "lightgreen";
+                      } else if (msg.toLowerCase().includes("edit")) {
+                        backgroundColor = "lightyellow";
+                      } else if (msg.toLowerCase().includes("delete")) {
+                        backgroundColor = "lightcoral";
+                      } else if (msg.toLowerCase().includes("duplicate")) {
+                        backgroundColor = "lightgray";
+                      }
+
+                      return (
+                        <li key={i} style={{ backgroundColor, padding: "10px" }}>
+                          {msg}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              )}
+            </div>
             <button className="icon-btn">
               <FiSettings />
             </button>
