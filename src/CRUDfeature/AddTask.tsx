@@ -4,9 +4,23 @@ import "./AddTask.css";
 import { BiTrash } from "react-icons/bi";
 import { BsGripVertical } from "react-icons/bs";
 
+interface Subtask {
+  id: string;
+  title: string;
+  isCompleted: boolean;
+}
+
+interface Task {
+  id: string;
+  title: string;
+  description: string;
+  status: string;
+  dueDate?: string;
+  subtasks: Subtask[];
+}
 interface SubtaskItemProps {
   closeModal: () => void;
-  addTask: (task: any) => void;
+  addTask: (task: Task) => void;
 }
 
 export default function AddTask({ closeModal, addTask }: SubtaskItemProps) {
