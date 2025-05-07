@@ -2,9 +2,10 @@ import { useState, useEffect } from "react";
 import "./Layout.css";
 import "./BoardListView.css";
 import DarkLightSwitch from "./DarkLightSwitch";
-import { BiBell, BiCalendarEvent } from "react-icons/bi";
+import { BiBell} from "react-icons/bi";
 import { FiSettings } from "react-icons/fi";
 import { FaChevronDown } from "react-icons/fa";
+import { LayoutGrid, List, Calendar, Users } from 'lucide-react';
 import AddTask from "../CRUDfeature/AddTask";
 import { taskFilter, taskSort } from "./Types";
 import BoardView from "./BoardView";
@@ -32,9 +33,9 @@ export default function Layout() {
   const [showSortMenu, setShowSortMenu] = useState(false);
   const [selectedFilter, setSelectedFilter] = useState("All Tasks");
   const [selectedSort, setSelectedSort] = useState("Priority (High to Low)");
-  const [openTaskMenuId, setOpenTaskMenuId] = useState<string | null>(null);
+  const [openTaskMenuId, setOpenTaskMenuId] = useState(null);
   const [selectedTask, setSelectedTask] = useState(null);
-  const [editTaskId, setEditTaskId] = useState<string | null>(null);
+  const [editTaskId, setEditTaskId] = useState(null);
 
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
@@ -44,7 +45,7 @@ export default function Layout() {
     localStorage.setItem("notifications", JSON.stringify(notifications));
   }, [notifications]);
 
-  const pushNotification = (msg: string) => {
+  const pushNotification = (msg) => {
     setNotifications((prev) => [msg, ...prev]);
   };
 
@@ -61,11 +62,11 @@ export default function Layout() {
     pushNotification(`You edited task: "${updatedTask.title}"`);
   };
 
-  const handleThreeDotsClick = (taskId: string) => {
+  const handleThreeDotsClick = (taskId) => {
     setOpenTaskMenuId((prevId) => (prevId === taskId ? null : taskId));
   };
 
-  const handleThreeDotsOptionClick = (option: string, taskId: string) => {
+  const handleThreeDotsOptionClick = (option, taskId) => {
     const task = tasks.find((t) => t.id === taskId);
 
     if (option === "Edit" || option === "Add Subtask") {
@@ -130,6 +131,13 @@ export default function Layout() {
     return 0;
   });
 
+  const views = [
+    { key: "board", label: "Board", icon: <LayoutGrid size={16} /> },
+    { key: "list", label: "List", icon: <List size={16} /> },
+    { key: "calendar", label: "Calendar", icon: <Calendar size={16} /> },
+    { key: "team", label: "Team", icon: <Users size={16} /> },
+  ];
+
   return (
     <div className="app-container">
       <div className="app-header">
@@ -157,28 +165,18 @@ export default function Layout() {
                   <span className="badge">{notifications.length}</span>
                 )}
               </button>
-
               {showNotifications && (
                 <div className="notification-panel">
                   <h4>Notifications</h4>
                   <ul>
                     {notifications.map((msg, i) => {
                       let backgroundColor = "lightgray";
-
-                      if (msg.toLowerCase().includes("add")) {
-                        backgroundColor = "lightgreen";
-                      } else if (msg.toLowerCase().includes("edit")) {
-                        backgroundColor = "lightyellow";
-                      } else if (msg.toLowerCase().includes("delete")) {
-                        backgroundColor = "lightcoral";
-                      } else if (msg.toLowerCase().includes("duplicate")) {
-                        backgroundColor = "lightgray";
-                      }
-
+                      if (msg.toLowerCase().includes("add")) backgroundColor = "lightgreen";
+                      else if (msg.toLowerCase().includes("edit")) backgroundColor = "lightyellow";
+                      else if (msg.toLowerCase().includes("delete")) backgroundColor = "lightcoral";
+                      else if (msg.toLowerCase().includes("duplicate")) backgroundColor = "lightgray";
                       return (
-                        <li key={i} style={{ backgroundColor, padding: "10px" }}>
-                          {msg}
-                        </li>
+                        <li key={i} style={{ backgroundColor, padding: "10px" }}>{msg}</li>
                       );
                     })}
                   </ul>
@@ -198,63 +196,46 @@ export default function Layout() {
         </div>
 
         <div className="header-bottom">
-          <div className="tab-group-left">
-            <button className="tab" onClick={() => setView("board")}>
-              Board
-            </button>
-            <button className="tab" onClick={() => setView("list")}>
-              List
-            </button>
-            <button className="tab" onClick={() => setView("calendar")}>
-              <BiCalendarEvent /> Calendar
-            </button>
-            <button className="tab">Team</button>
+          <div className="tab-switcher">
+            {views.map((v) => (
+              <button
+                key={v.key}
+                className={`tab ${view === v.key ? 'active' : ''}`}
+                onClick={() => setView(v.key)}
+              >
+                {v.icon} <span>{v.label}</span>
+              </button>
+            ))}
           </div>
 
           <div className="tab-group-right">
             <div className="dropdown-wrapper">
-              <button
-                className="tab"
-                onClick={() => setShowFilterMenu((prev) => !prev)}
-              >
+              <button className="tab" onClick={() => setShowFilterMenu((prev) => !prev)}>
                 Filter <FaChevronDown />
               </button>
               {showFilterMenu && (
                 <div className="dropdown-menu">
                   {taskFilter.map((opt) => (
-                    <button
-                      key={opt}
-                      onClick={() => {
-                        setSelectedFilter(opt);
-                        setShowFilterMenu(false);
-                      }}
-                    >
-                      {opt}
-                    </button>
+                    <button key={opt} onClick={() => {
+                      setSelectedFilter(opt);
+                      setShowFilterMenu(false);
+                    }}>{opt}</button>
                   ))}
                 </div>
               )}
             </div>
 
             <div className="dropdown-wrapper">
-              <button
-                className="tab"
-                onClick={() => setShowSortMenu((prev) => !prev)}
-              >
+              <button className="tab" onClick={() => setShowSortMenu((prev) => !prev)}>
                 Sort <FaChevronDown />
               </button>
               {showSortMenu && (
                 <div className="dropdown-menu">
                   {taskSort.map((opt) => (
-                    <button
-                      key={opt}
-                      onClick={() => {
-                        setSelectedSort(opt);
-                        setShowSortMenu(false);
-                      }}
-                    >
-                      {opt}
-                    </button>
+                    <button key={opt} onClick={() => {
+                      setSelectedSort(opt);
+                      setShowSortMenu(false);
+                    }}>{opt}</button>
                   ))}
                 </div>
               )}
@@ -264,10 +245,7 @@ export default function Layout() {
       </div>
 
       {showCreateModal && (
-        <AddTask
-          closeModal={() => setShowCreateModal(false)}
-          addTask={addTask}
-        />
+        <AddTask closeModal={() => setShowCreateModal(false)} addTask={addTask} />
       )}
 
       {selectedTask && (
@@ -297,7 +275,6 @@ export default function Layout() {
             setSelectedTask={setSelectedTask}
           />
         )}
-
         {view === "list" && (
           <ListView
             filteredTasks={sortedTasks}
@@ -307,8 +284,8 @@ export default function Layout() {
             setSelectedTask={setSelectedTask}
           />
         )}
-
         {view === "calendar" && <CalendarView tasks={sortedTasks} />}
+        {view === "team" && <div className="team-view">Team view coming soon...</div>}
       </div>
     </div>
   );
