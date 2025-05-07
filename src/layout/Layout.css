@@ -4,8 +4,8 @@
   --input-bg: #f0f0f0;
   --input-text: #000000;
   --icon-color: #000000;
-  --btn-bg: #ffffff;
-  --btn-text: #000000;
+  --btn-bg: #000000;
+  --btn-text: #ffffff;
   --tab-hover-bg: #e0e0e0;
   --dropdown-bg: #ffffff;
   --dropdown-border: #ccc;
@@ -32,7 +32,6 @@ html.dark {
 .app-container {
   background-color: var(--bg);
   color: var(--text);
-  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .app-header {
@@ -100,9 +99,25 @@ html.dark {
   flex-wrap: wrap;
 }
 
-.tab-switcher {
+.tabs-list {
   display: flex;
+  background-color: var(--bg);
+  border-bottom: 1px solid var(--header-border);
 }
+
+.tabs-trigger {
+  padding: 0.5rem 1rem;
+  color: var(--text);
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.tabs-trigger:hover {
+  background-color: var(--tab-hover-bg);
+}
+
 
 .tab-group-left,
 .tab-group-right {

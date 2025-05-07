@@ -2,10 +2,10 @@ import { useState, useEffect } from "react";
 import "./Layout.css";
 import "./BoardListView.css";
 import DarkLightSwitch from "./DarkLightSwitch";
-import { BiBell} from "react-icons/bi";
+import { BiBell } from "react-icons/bi";
 import { FiSettings } from "react-icons/fi";
 import { FaChevronDown } from "react-icons/fa";
-import { LayoutGrid, List, Calendar, Users } from 'lucide-react';
+import { LayoutGrid, List, Calendar, Users } from "lucide-react";
 import AddTask from "../CRUDfeature/AddTask";
 import { taskFilter, taskSort } from "./Types";
 import BoardView from "./BoardView";
@@ -13,6 +13,7 @@ import ListView from "./ListView";
 import CalendarView from "./CalendarView";
 import TaskDetailModal from "./TaskDetailModal";
 import EditTask from "../CRUDfeature/EditTask";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function Layout() {
   const [tasks, setTasks] = useState(() => {
@@ -122,6 +123,7 @@ export default function Layout() {
     if (selectedSort === "Priority (High to Low)") {
       return priorityRank[b.priority] - priorityRank[a.priority];
     }
+
     if (selectedSort === "Priority (Low to High)") {
       return priorityRank[a.priority] - priorityRank[b.priority];
     }
@@ -171,12 +173,21 @@ export default function Layout() {
                   <ul>
                     {notifications.map((msg, i) => {
                       let backgroundColor = "lightgray";
-                      if (msg.toLowerCase().includes("add")) backgroundColor = "lightgreen";
-                      else if (msg.toLowerCase().includes("edit")) backgroundColor = "lightyellow";
-                      else if (msg.toLowerCase().includes("delete")) backgroundColor = "lightcoral";
-                      else if (msg.toLowerCase().includes("duplicate")) backgroundColor = "lightgray";
+                      if (msg.toLowerCase().includes("add"))
+                        backgroundColor = "lightgreen";
+                      else if (msg.toLowerCase().includes("edit"))
+                        backgroundColor = "lightyellow";
+                      else if (msg.toLowerCase().includes("delete"))
+                        backgroundColor = "lightcoral";
+                      else if (msg.toLowerCase().includes("duplicate"))
+                        backgroundColor = "lightgray";
                       return (
-                        <li key={i} style={{ backgroundColor, padding: "10px" }}>{msg}</li>
+                        <li
+                          key={i}
+                          style={{ backgroundColor, padding: "10px" }}
+                        >
+                          {msg}
+                        </li>
                       );
                     })}
                   </ul>
@@ -195,57 +206,104 @@ export default function Layout() {
           </div>
         </div>
 
-        <div className="header-bottom">
-          <div className="tab-switcher">
-            {views.map((v) => (
-              <button
-                key={v.key}
-                className={`tab ${view === v.key ? 'active' : ''}`}
-                onClick={() => setView(v.key)}
-              >
-                {v.icon} <span>{v.label}</span>
-              </button>
-            ))}
+        <Tabs value={view} onValueChange={setView}>
+          <div className="header-bottom">
+            <TabsList className="tabs-list">
+              {views.map((v) => (
+                <TabsTrigger key={v.key} value={v.key} className="tabs-trigger">
+                  {v.icon}
+                  <span>{v.label}</span>
+                </TabsTrigger>
+              ))}
+            </TabsList>
+
+            <div className="tab-group-right">
+              <div className="dropdown-wrapper">
+                <button
+                  className="tab"
+                  onClick={() => setShowFilterMenu((prev) => !prev)}
+                >
+                  Filter <FaChevronDown />
+                </button>
+                {showFilterMenu && (
+                  <div className="dropdown-menu">
+                    {taskFilter.map((opt) => (
+                      <button
+                        key={opt}
+                        onClick={() => {
+                          setSelectedFilter(opt);
+                          setShowFilterMenu(false);
+                        }}
+                      >
+                        {opt}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <div className="dropdown-wrapper">
+                <button
+                  className="tab"
+                  onClick={() => setShowSortMenu((prev) => !prev)}
+                >
+                  Sort <FaChevronDown />
+                </button>
+                {showSortMenu && (
+                  <div className="dropdown-menu">
+                    {taskSort.map((opt) => (
+                      <button
+                        key={opt}
+                        onClick={() => {
+                          setSelectedSort(opt);
+                          setShowSortMenu(false);
+                        }}
+                      >
+                        {opt}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
           </div>
 
-          <div className="tab-group-right">
-            <div className="dropdown-wrapper">
-              <button className="tab" onClick={() => setShowFilterMenu((prev) => !prev)}>
-                Filter <FaChevronDown />
-              </button>
-              {showFilterMenu && (
-                <div className="dropdown-menu">
-                  {taskFilter.map((opt) => (
-                    <button key={opt} onClick={() => {
-                      setSelectedFilter(opt);
-                      setShowFilterMenu(false);
-                    }}>{opt}</button>
-                  ))}
-                </div>
-              )}
-            </div>
+          <TabsContent value="board">
+            <BoardView
+              filteredTasks={sortedTasks}
+              handleThreeDotsClick={handleThreeDotsClick}
+              handleThreeDotsOptionClick={handleThreeDotsOptionClick}
+              openTaskMenuId={openTaskMenuId}
+              setShowCreateModal={setShowCreateModal}
+              setSelectedTask={setSelectedTask}
+            />
+          </TabsContent>
 
-            <div className="dropdown-wrapper">
-              <button className="tab" onClick={() => setShowSortMenu((prev) => !prev)}>
-                Sort <FaChevronDown />
-              </button>
-              {showSortMenu && (
-                <div className="dropdown-menu">
-                  {taskSort.map((opt) => (
-                    <button key={opt} onClick={() => {
-                      setSelectedSort(opt);
-                      setShowSortMenu(false);
-                    }}>{opt}</button>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
+          <TabsContent value="list">
+            <ListView
+              filteredTasks={sortedTasks}
+              handleThreeDotsClick={handleThreeDotsClick}
+              handleThreeDotsOptionClick={handleThreeDotsOptionClick}
+              openTaskMenuId={openTaskMenuId}
+              setSelectedTask={setSelectedTask}
+            />
+          </TabsContent>
+
+          <TabsContent value="calendar">
+            <CalendarView tasks={sortedTasks} />
+          </TabsContent>
+
+          <TabsContent value="team">
+            <div className="team-view">Team view coming soon...</div>
+          </TabsContent>
+        </Tabs>
       </div>
 
       {showCreateModal && (
-        <AddTask closeModal={() => setShowCreateModal(false)} addTask={addTask} />
+        <AddTask
+          closeModal={() => setShowCreateModal(false)}
+          addTask={addTask}
+        />
       )}
 
       {selectedTask && (
@@ -263,30 +321,6 @@ export default function Layout() {
           updateTask={updateTask}
         />
       )}
-
-      <div className="view-container">
-        {view === "board" && (
-          <BoardView
-            filteredTasks={sortedTasks}
-            handleThreeDotsClick={handleThreeDotsClick}
-            handleThreeDotsOptionClick={handleThreeDotsOptionClick}
-            openTaskMenuId={openTaskMenuId}
-            setShowCreateModal={setShowCreateModal}
-            setSelectedTask={setSelectedTask}
-          />
-        )}
-        {view === "list" && (
-          <ListView
-            filteredTasks={sortedTasks}
-            handleThreeDotsClick={handleThreeDotsClick}
-            handleThreeDotsOptionClick={handleThreeDotsOptionClick}
-            openTaskMenuId={openTaskMenuId}
-            setSelectedTask={setSelectedTask}
-          />
-        )}
-        {view === "calendar" && <CalendarView tasks={sortedTasks} />}
-        {view === "team" && <div className="team-view">Team view coming soon...</div>}
-      </div>
     </div>
   );
 }

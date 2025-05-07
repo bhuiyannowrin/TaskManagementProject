@@ -1,6 +1,6 @@
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { BiCalendarEvent } from "react-icons/bi";
-import { threeDotsOptions, priorityColors } from "./Types";
+import { threeDotsOptions} from "./Types";
 import { FiTag } from "react-icons/fi";
 
 export default function BoardView({
