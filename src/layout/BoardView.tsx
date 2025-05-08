@@ -11,13 +11,14 @@ export default function BoardView({
   setShowCreateModal,
   setSelectedTask,
   updateTask,
+
 }) {
   return (
     <div className="board-view">
       {["Todo", "In Progress", "Review", "Done"].map((status) => (
         <div key={status} className="board-column">
-          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-            <h3 style={{ margin: 0 }}>
+          <div className="flex items-center gap-8">
+            <h3 className="m-0 text-var(--text) font-bold" >
               {status} (
               {filteredTasks
                 .map((task) => {
@@ -36,20 +37,7 @@ export default function BoardView({
                 })
                 .filter((task) => task.computedStatus === status).length})
             </h3>
-            <button
-              style={{
-                color: "whitesmoke",
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                height: "24px",
-                width: "24px",
-                fontSize: "16px",
-                backgroundColor: "#333",
-                border: "none",
-                borderRadius: "4px",
-                cursor: "pointer",
-              }}
+            <button className="text-var(--text) inline-flex justify-center items-center h-24 w-24 border-none cursor-pointer text-2xl"
               onClick={() => setShowCreateModal(true)}
             >
               +
@@ -79,13 +67,7 @@ export default function BoardView({
                 onClick={() => setSelectedTask(task)}
                 style={{ cursor: "pointer" }}
               >
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    gap: "150px",
-                  }}
-                >
+                <div className="flex items-center gap-20">
                   <button
                     className={`priority-button ${task.priority.toLowerCase()}`}
                   >
@@ -121,9 +103,7 @@ export default function BoardView({
 
                 <h2>{task.title}</h2>
                 <p>{task.description}</p>
-                <small
-                  style={{ display: "flex", alignItems: "center", gap: "8px" }}
-                >
+                <small className="flex items-center gap-1">
                   <BiCalendarEvent /> {task.dueDate}
                 </small>
 

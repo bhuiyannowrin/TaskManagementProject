@@ -92,7 +92,6 @@ export default function Layout() {
         setTasks((prevTasks) => prevTasks.filter((t) => t.id !== taskId));
       }
     }
-
     setOpenTaskMenuId(null);
   };
 
@@ -127,6 +126,7 @@ export default function Layout() {
     if (selectedSort === "Priority (Low to High)") {
       return priorityRank[a.priority] - priorityRank[b.priority];
     }
+
     if (selectedSort === "Recently Updated") {
       return new Date(b.updatedAt || 0) - new Date(a.updatedAt || 0);
     }
@@ -137,7 +137,7 @@ export default function Layout() {
     { key: "board", label: "Board", icon: <LayoutGrid size={16} /> },
     { key: "list", label: "List", icon: <List size={16} /> },
     { key: "calendar", label: "Calendar", icon: <Calendar size={16} /> },
-    { key: "team", label: "Team", icon: <Users size={16} /> },
+    { key: "team", label: "Team", icon: <Users size={16} /> }
   ];
 
   return (
@@ -244,7 +244,8 @@ export default function Layout() {
 
               <div className="dropdown-wrapper">
                 <button
-                  className="tab"
+                  className="inline-flex items-center justify-center gap-2 h-9 px-3 border-2"
+
                   onClick={() => setShowSortMenu((prev) => !prev)}
                 >
                   Sort <FaChevronDown />

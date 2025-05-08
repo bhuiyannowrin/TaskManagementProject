@@ -31,9 +31,7 @@ function CalendarView({ tasks }) {
     days.push(new Date(selectedDate.getFullYear(), selectedDate.getMonth(), i));
   }
 
-  
   const getISODate = (date) => date.toLocaleDateString('en-CA');
-
 
   const formatDisplayDate = (date) =>
     date.toLocaleDateString('en-US', {
@@ -109,7 +107,7 @@ function CalendarView({ tasks }) {
                   padding: '10px',
                   border: date ? '1px solid #ccc' : 'none',
                   cursor: date ? 'pointer' : 'default',
-                  backgroundColor: isSelected ? '#00796b' : isToday ? '#e0f7fa' : 'white',
+                  backgroundColor: isSelected ? 'lightgreen' : isToday ? '#e0f7fa' : 'white',
                   color: isSelected ? '#fff' : '#000',
                   textAlign: 'center',
                   fontWeight: isSelected ? 'bold' : 'normal',

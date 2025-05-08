@@ -1,6 +1,7 @@
 :root {
   --bg: #ffffff;
   --text: #000000;
+  --colbg: #e2e8f0;
   --input-bg: #f0f0f0;
   --input-text: #000000;
   --icon-color: #000000;
@@ -16,6 +17,7 @@
 html.dark {
   --bg: #1e1e1e;
   --text: #ffffff;
+  --colbg: #1e293b66;
   --input-bg: #222;
   --input-text: #ffffff;
   --icon-color: #ffffff;
