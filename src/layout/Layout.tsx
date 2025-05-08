@@ -206,11 +206,11 @@ export default function Layout() {
           </div>
         </div>
 
-        <Tabs value={view} onValueChange={setView}>
+        <Tabs value={view} onValueChange={setView} className="">
           <div className="header-bottom">
-            <TabsList className="tabs-list">
+            <TabsList className="inline-flex h-10 items-center justify-center rounded-md bg-muted p-1 text-muted-foreground">
               {views.map((v) => (
-                <TabsTrigger key={v.key} value={v.key} className="tabs-trigger">
+                <TabsTrigger key={v.key} value={v.key} className="outline-none m-1 p-1 border-0 focus:border-0 bg-transparent">
                   {v.icon}
                   <span>{v.label}</span>
                 </TabsTrigger>
