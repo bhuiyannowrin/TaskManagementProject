@@ -63,7 +63,7 @@ export default function ListView({
                 <td><small>{task.assignee}</small></td>
 
                 <td style={{ textAlign: "center" }}>
-                  <small>{task.progress}%</small>
+                  <small>{task.progress || 0} %</small>
                 </td>
 
                 <td>

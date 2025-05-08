@@ -50,7 +50,7 @@ function Button({
   return (
     <Comp
       data-slot="button"
-      className={clx(buttonVariants({ variant, size, className }))}
+      className={clsx(buttonVariants({ variant, size, className }))}
       {...props}
     />
   )

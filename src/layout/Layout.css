@@ -19,8 +19,8 @@ html.dark {
   --input-bg: #222;
   --input-text: #ffffff;
   --icon-color: #ffffff;
-  --btn-bg: #333;
-  --btn-text: #ffffff;
+  --btn-bg: #ffffff;
+  --btn-text: #000000;
   --tab-hover-bg: #333;
   --dropdown-bg: #000000;
   --dropdown-border: #444;
@@ -118,16 +118,17 @@ html.dark {
   background-color: var(--tab-hover-bg);
 }
 
-
 .tab-group-left,
 .tab-group-right {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
+  gap: 1rem;
+  
 }
 
 .tab {
-  background: none;
+  background-color: var(--btn-bg);
   border: none;
   padding: none;
   cursor: pointer;
@@ -136,7 +137,7 @@ html.dark {
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  color: var(--text);
+  color: var(--btn-text);
 }
 
 .tab:hover {
@@ -149,11 +150,10 @@ html.dark {
   color: white;
 }
 
-
-
 .dropdown-wrapper {
   position: relative;
   display: flex;
+  background-color: var(--dropdown-bg);
 }
 
 .dropdown-menu {
