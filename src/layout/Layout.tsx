@@ -14,6 +14,7 @@ import CalendarView from "./CalendarView";
 import TaskDetailModal from "./TaskDetailModal";
 import EditTask from "../CRUDfeature/EditTask";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import TeamView from "./TeamView";
 
 export default function Layout() {
   const [tasks, setTasks] = useState(() => {
@@ -294,7 +295,7 @@ export default function Layout() {
           </TabsContent>
 
           <TabsContent value="team">
-            <div className="team-view">Team view coming soon...</div>
+            <TeamView/>
           </TabsContent>
         </Tabs>
       </div>
