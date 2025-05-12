@@ -122,11 +122,9 @@ export default function Layout() {
     if (selectedSort === "Priority (High to Low)") {
       return priorityRank[b.priority] - priorityRank[a.priority];
     }
-
     if (selectedSort === "Priority (Low to High)") {
       return priorityRank[a.priority] - priorityRank[b.priority];
     }
-
     if (selectedSort === "Recently Updated") {
       return new Date(b.updatedAt || 0) - new Date(a.updatedAt || 0);
     }

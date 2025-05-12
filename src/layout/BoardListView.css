@@ -43,7 +43,7 @@
   }
   
   .task-card:hover {
-    background: #3a3a3a;
+    background: var(--colbg);
   }
   
   .task-card h4 {

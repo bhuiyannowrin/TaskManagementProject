@@ -146,11 +146,13 @@ function CalendarView({ tasks }) {
                 className={`calendar-day ${date ? "" : "empty"} 
                 p-2 text-center rounded-md relative
                 ${
-                date ? "border border-gray-300 cursor-pointer" : "border-0 cursor-default"
-               }
+                  date
+                    ? "border border-gray-300 cursor-pointer"
+                    : "border-0 cursor-default"
+                }
             ${
               isSelected
-                ? "bg-green-200 text-white font-bold"
+                ? "bg-green-900 text-white font-bold"
                 : isToday
                 ? "bg-cyan-100 text-black"
                 : "bg-white text-black"
@@ -178,16 +180,16 @@ function CalendarView({ tasks }) {
           })}
         </div>
 
-        <div
-        className=" flex items-center mt-4 text-center text-sm"
-        >
+        <div className=" flex items-center mt-4 text-center text-sm">
           <span className="flex items-center text-green-600 mr-2">
-          ● Most Tasks
+            ● Most Tasks
           </span>
           <span className="flex items-center text-blue-600 mr-2">
             ● Second Most Tasks
           </span>
-          <span className="flex items-center text-red-600 mr-2">● Has Tasks</span>
+          <span className="flex items-center text-red-600 mr-2">
+            ● Has Tasks
+          </span>
         </div>
       </div>
 
@@ -196,15 +198,16 @@ function CalendarView({ tasks }) {
           <>
             {tasksForSelectedDay.length > 0 ? (
               <ul>
+                <li>
+                  <div>
+                    <strong>{formatDisplayDate(new Date(activeDate))}</strong>
+                  </div>
+                </li>
+                <h1 className="bg-purple-950 p-2 text-amber-50">
+                  <b> Total Tasks: {tasksForSelectedDay.length} </b>
+                </h1>
                 {tasksForSelectedDay.map((task) => (
                   <React.Fragment key={task.id}>
-                    <li style={{ marginBottom: "1rem" }}>
-                      <div>
-                        <strong>
-                          {formatDisplayDate(new Date(task.dueDate))}
-                        </strong>
-                      </div>
-                    </li>
                     <div>
                       <strong>{task.title}</strong>
                     </div>

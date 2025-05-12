@@ -1,4 +1,4 @@
-import { BsThreeDotsVertical } from "react-icons/bs";
+import { BsThreeDots} from "react-icons/bs";
 import { BiCalendarEvent } from "react-icons/bi";
 import { threeDotsOptions} from "./Types";
 import { FiTag } from "react-icons/fi";
@@ -79,10 +79,9 @@ export default function BoardView({
                     onClick={(e) => e.stopPropagation()}
                   >
                     <button
-                      className="tab"
                       onClick={() => handleThreeDotsClick(task.id)}
                     >
-                      <BsThreeDotsVertical />
+                      <BsThreeDots />
                     </button>
                     {openTaskMenuId === task.id && (
                       <div className="dropdown-menu">

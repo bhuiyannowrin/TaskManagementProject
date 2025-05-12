@@ -5,9 +5,9 @@ import { BiTrash } from "react-icons/bi";
 import { BsGripVertical } from "react-icons/bs";
 
 interface Subtask {
-  id: string;
+  id?: string;
   title: string;
-  isCompleted: boolean;
+  completed: boolean;
 }
 
 interface Task {
@@ -16,8 +16,10 @@ interface Task {
   description: string;
   status: string;
   dueDate?: string;
+  priority: string;
   subtasks: Subtask[];
 }
+
 interface SubtaskItemProps {
   closeModal: () => void;
   addTask: (task: Task) => void;
@@ -28,19 +30,25 @@ export default function AddTask({ closeModal, addTask }: SubtaskItemProps) {
   const [description, setDescription] = useState("");
   const [priority, setPriority] = useState("Low");
   const [dueDate, setDueDate] = useState("");
-  const [subtasks, setSubtasks] = useState([]);
+  const [subtasks, setSubtasks] = useState<Subtask[]>([]);
+
+  const [formErrors, setFormErrors] = useState({
+    title: "",
+    description: "",
+    dueDate: "",
+  });
 
   const handleAddSubtask = () => {
     setSubtasks([...subtasks, { title: "", completed: false }]);
   };
 
-  const handleSubtaskChange = (index, value) => {
+  const handleSubtaskChange = (index: number, value: string) => {
     const updated = [...subtasks];
     updated[index].title = value;
     setSubtasks(updated);
   };
 
-  const handleCheckboxChange = (index) => {
+  const handleCheckboxChange = (index: number) => {
     const updated = [...subtasks];
     updated[index].completed = !updated[index].completed;
     setSubtasks(updated);
@@ -52,7 +60,7 @@ export default function AddTask({ closeModal, addTask }: SubtaskItemProps) {
     setSubtasks(updated);
   };
 
-  const handleDragEnd = (result) => {
+  const handleDragEnd = (result: any) => {
     if (!result.destination) return;
     const reordered = Array.from(subtasks);
     const [moved] = reordered.splice(result.source.index, 1);
@@ -61,7 +69,17 @@ export default function AddTask({ closeModal, addTask }: SubtaskItemProps) {
   };
 
   const handleSubmit = () => {
-    if (!title) return;
+    const errors = {
+      title: title.trim() === "" ? "Title is required." : "",
+      description: description.trim() === "" ? "Description is required." : "",
+      dueDate: dueDate.trim() === "" ? "Due Date is required." : "",
+    };
+
+    setFormErrors(errors);
+
+    const hasError = Object.values(errors).some((msg) => msg !== "");
+    if (hasError) return;
+
     addTask({
       id: Date.now().toString(),
       title,
@@ -71,6 +89,7 @@ export default function AddTask({ closeModal, addTask }: SubtaskItemProps) {
       status: "Todo",
       subtasks,
     });
+
     closeModal();
   };
 
@@ -83,24 +102,34 @@ export default function AddTask({ closeModal, addTask }: SubtaskItemProps) {
         <h2 style={{ textAlign: "left" }}>Create New Task</h2>
 
         <div className="form-group">
-          <label>Title</label>
+          <label>
+            Title <span className="text-red-600">*</span>
+          </label>
           <input
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
           />
+          {formErrors.title && <p className="text-red-600 mt-1 text-left">{formErrors.title}</p>}
         </div>
 
         <div className="form-group">
-          <label>Description</label>
+          <label>
+            Description <span className="text-red-600">*</span>
+          </label>
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
           />
+          {formErrors.description && (
+            <p className="text-red-600 mt-1 text-left">{formErrors.description}</p>
+          )}
         </div>
 
         <div className="form-group">
-          <label>Priority</label>
+          <label>
+            Priority <span className="text-red-600">*</span>
+          </label>
           <div className="priority-options">
             {["Low", "Medium", "High"].map((p) => (
               <label key={p}>
@@ -109,7 +138,7 @@ export default function AddTask({ closeModal, addTask }: SubtaskItemProps) {
                   name="priority"
                   checked={priority === p}
                   onChange={() => setPriority(p)}
-                />{" "}
+                />
                 {p}
               </label>
             ))}
@@ -117,12 +146,17 @@ export default function AddTask({ closeModal, addTask }: SubtaskItemProps) {
         </div>
 
         <div className="form-group">
-          <label>Due Date</label>
+          <label>
+            Due Date <span className="text-red-600">*</span>
+          </label>
           <input
             type="date"
             value={dueDate}
             onChange={(e) => setDueDate(e.target.value)}
           />
+          {formErrors.dueDate && (
+            <p className="text-red-600 mt-1 text-left">{formErrors.dueDate}</p>
+          )}
         </div>
 
         <div className="form-group">
@@ -142,14 +176,7 @@ export default function AddTask({ closeModal, addTask }: SubtaskItemProps) {
                   ref={provided.innerRef}
                 >
                   {subtasks.length === 0 ? (
-                    <p
-                      style={{
-                        textAlign: "left",
-                        fontSize: "12px",
-                        marginTop: "10px",
-                        color: "#666",
-                      }}
-                    >
+                    <p className="text-left text-sm mt-4 text-gray-500">
                       No subtasks yet. Add one to break down this task.
                     </p>
                   ) : (
@@ -173,9 +200,7 @@ export default function AddTask({ closeModal, addTask }: SubtaskItemProps) {
                               ...provided.draggableProps.style,
                             }}
                           >
-                            <div
-                              className="cursor-grab text-muted-foreground"
-                            >
+                            <div className="cursor-grab text-muted-foreground">
                               <BsGripVertical className="h-4 w-4" />
                             </div>
 

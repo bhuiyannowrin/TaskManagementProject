@@ -8,15 +8,9 @@ import {
   BiPaperclip,
   BiUser,
 } from "react-icons/bi";
-import { BsClock } from "react-icons/bs";
 import { FiDownload as Download } from "react-icons/fi";
 
-import {
-  Tabs,
-  TabsList,
-  TabsTrigger,
-  TabsContent,
-} from "@/components/ui/tabs";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
 import "./TaskDetailModal.css";
 
@@ -113,8 +107,12 @@ export default function TaskDetailModal({ task, onClose, setEditTaskId }) {
   return (
     <div className="modal-overlay">
       <div className="modal-content">
-        <button className="close-btn" onClick={onClose}>×</button>
-        <button className="edit-btn" onClick={handleEditClick}><BiEdit /></button>
+        <button className="close-btn" onClick={onClose}>
+          ×
+        </button>
+        <button className="edit-btn" onClick={handleEditClick}>
+          <BiEdit />
+        </button>
 
         <div className={`priority-badge ${task.priority.toLowerCase()}`}>
           {task.priority} Priority
@@ -156,10 +154,18 @@ export default function TaskDetailModal({ task, onClose, setEditTaskId }) {
 
           <TabsContent value="details">
             <div className="meta-info">
-              <span><BiCalendarEvent /> Due: {task.dueDate}</span>
-              <span><BiUser /> XYZ</span>
-              <span><BiMessage /> {comments.length} comments</span>
-              <span><BiFile /> {uploadedFiles.length} files</span>
+              <span>
+                <BiCalendarEvent /> Due: {task.dueDate}
+              </span>
+              <span>
+                <BiUser /> XYZ
+              </span>
+              <span>
+                <BiMessage /> {comments.length} comments
+              </span>
+              <span>
+                <BiFile /> {uploadedFiles.length} files
+              </span>
             </div>
 
             <div className="description">
@@ -183,9 +189,12 @@ export default function TaskDetailModal({ task, onClose, setEditTaskId }) {
               <span className="progress-percent">{task.progress || 0}%</span>
             </div>
 
-            <div className="tags">
-              {task.tags?.map((tag, i) => (
-                <span className="tag" key={i}>{tag}</span>
+            <div className="flex items-center text-xs px-2 py-1 rounded-md gap-2">
+              {task.subtasks.map((subtask, index) => (
+                <div key={index} className="tag"
+                >
+                  {subtask.title}
+                </div>
               ))}
             </div>
           </TabsContent>
@@ -278,10 +287,14 @@ export default function TaskDetailModal({ task, onClose, setEditTaskId }) {
                       </div>
                       <div className="activity-details">
                         <div className="avatar-name-row">
-                          <div className="avatar-placeholder"><BiUser /></div>
+                          <div className="avatar-placeholder">
+                            <BiUser />
+                          </div>
                           <span className="author-name">{item.author}</span>
                         </div>
-                        <div className="activity-time">{timeAgo(item.date)}</div>
+                        <div className="activity-time">
+                          {timeAgo(item.date)}
+                        </div>
                         <div className="activity-text">
                           {item.type === "comment"
                             ? "Commented: " + item.text

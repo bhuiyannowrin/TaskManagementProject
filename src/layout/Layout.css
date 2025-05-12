@@ -12,6 +12,8 @@
   --dropdown-border: #ccc;
   --dropdown-hover: #ddd;
   --header-border: #ccc;
+  --tasksidebar-bg: #e4dfdf;
+  --tasksidebar-brderleft: #3b3939;
 }
 
 html.dark {
@@ -28,11 +30,14 @@ html.dark {
   --dropdown-border: #444;
   --dropdown-hover: #555;
   --header-border: #333;
+  --tasksidebar-bg: #3b3939;
+  --tasksidebar-brderleft: #ddd
 }
 
 .app-container {
   background-color: var(--bg);
   color: var(--text);
+
 }
 
 .app-header {
@@ -154,7 +159,7 @@ html.dark {
 .dropdown-wrapper {
   position: relative;
   display: flex;
-  background-color: var(--dropdown-bg);
+  
 }
 
 .dropdown-menu {
