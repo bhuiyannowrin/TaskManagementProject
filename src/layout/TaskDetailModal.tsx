@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-
 import {
   BiCalendarEvent,
   BiEdit,
@@ -7,10 +6,18 @@ import {
   BiMessage,
   BiCommentDetail,
   BiPaperclip,
-  BiUser
+  BiUser,
 } from "react-icons/bi";
 import { BsClock } from "react-icons/bs";
 import { FiDownload as Download } from "react-icons/fi";
+
+import {
+  Tabs,
+  TabsList,
+  TabsTrigger,
+  TabsContent,
+} from "@/components/ui/tabs";
+
 import "./TaskDetailModal.css";
 
 function timeAgo(date) {
@@ -20,11 +27,12 @@ function timeAgo(date) {
     { label: "month", seconds: 2592000 },
     { label: "day", seconds: 86400 },
     { label: "hour", seconds: 3600 },
-    { label: "minute", seconds: 60 }
+    { label: "minute", seconds: 60 },
   ];
   for (let i = 0; i < intervals.length; i++) {
     const interval = Math.floor(seconds / intervals[i].seconds);
-    if (interval >= 1) return `${interval} ${intervals[i].label}${interval > 1 ? "s" : ""} ago`;
+    if (interval >= 1)
+      return `${interval} ${intervals[i].label}${interval > 1 ? "s" : ""} ago`;
   }
   return "Just now";
 }
@@ -59,10 +67,10 @@ export default function TaskDetailModal({ task, onClose, setEditTaskId }) {
               name: file.name,
               type: file.type,
               size: file.size,
-              data: e.target.result
+              data: e.target.result,
             },
             author: "You",
-            date: new Date().toISOString()
+            date: new Date().toISOString(),
           });
         };
         reader.readAsDataURL(file);
@@ -81,7 +89,7 @@ export default function TaskDetailModal({ task, onClose, setEditTaskId }) {
       const newEntry = {
         author: "You",
         text: newComment,
-        date: new Date().toISOString()
+        date: new Date().toISOString(),
       };
       const updatedComments = [newEntry, ...comments];
       setComments(updatedComments);
@@ -97,7 +105,7 @@ export default function TaskDetailModal({ task, onClose, setEditTaskId }) {
 
   const combinedActivities = [
     ...comments.map((c) => ({ ...c, type: "comment" })),
-    ...uploadedFiles.map((f) => ({ ...f, type: "file" }))
+    ...uploadedFiles.map((f) => ({ ...f, type: "file" })),
   ].sort((a, b) => new Date(b.date) - new Date(a.date));
 
   if (!task) return null;
@@ -114,33 +122,51 @@ export default function TaskDetailModal({ task, onClose, setEditTaskId }) {
 
         <h2 className="task-title">{task.title}</h2>
 
-        <div className="tab-header">
-          {["details", "comments", "files", "activity"].map((tab) => (
-            <button
-              key={tab}
-              className={`tab ${activeTab === tab ? "active" : ""}`}
-              onClick={() => setActiveTab(tab)}
-            >
-              {tab === "activity" && <BsClock />}
-              {tab.charAt(0).toUpperCase() + tab.slice(1)}
-              {tab === "comments" && <span className="badge">{comments.length}</span>}
-              {tab === "files" && <span className="badge">{uploadedFiles.length}</span>}
-            </button>
-          ))}
-        </div>
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="mt-4">
+          <TabsList className="flex gap-2 w-full justify-start">
+            <TabsTrigger value="details">Details</TabsTrigger>
 
-        {activeTab === "details" && (
-          <>
+            <TabsTrigger value="comments">
+              Comments
+              {comments.length > 0 && (
+                <span className="ml-1 rounded-full bg-muted px-2 py-0.5 text-xs font-medium">
+                  {comments.length}
+                </span>
+              )}
+            </TabsTrigger>
+
+            <TabsTrigger value="files">
+              Files
+              {uploadedFiles.length > 0 && (
+                <span className="ml-1 rounded-full bg-muted px-2 py-0.5 text-xs font-medium">
+                  {uploadedFiles.length}
+                </span>
+              )}
+            </TabsTrigger>
+
+            <TabsTrigger value="activity">
+              Activity
+              {combinedActivities.length > 0 && (
+                <span className="ml-1 rounded-full bg-muted px-2 py-0.5 text-xs font-medium">
+                  {combinedActivities.length}
+                </span>
+              )}
+            </TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="details">
             <div className="meta-info">
               <span><BiCalendarEvent /> Due: {task.dueDate}</span>
               <span><BiUser /> XYZ</span>
               <span><BiMessage /> {comments.length} comments</span>
               <span><BiFile /> {uploadedFiles.length} files</span>
             </div>
+
             <div className="description">
               <strong>Description</strong>
               <p>{task.description}</p>
             </div>
+
             <div className="progress-section">
               <strong>Progress</strong>
               <input
@@ -151,21 +177,20 @@ export default function TaskDetailModal({ task, onClose, setEditTaskId }) {
                 readOnly
                 className="progress-slider"
                 style={{
-                  background: `linear-gradient(to right, #4caf50 ${task.progress}%, #ddd ${task.progress}%)`
+                  background: `linear-gradient(to right, #4caf50 ${task.progress}%, #ddd ${task.progress}%)`,
                 }}
               />
               <span className="progress-percent">{task.progress || 0}%</span>
             </div>
+
             <div className="tags">
               {task.tags?.map((tag, i) => (
                 <span className="tag" key={i}>{tag}</span>
               ))}
             </div>
-          </>
-        )}
+          </TabsContent>
 
-        {activeTab === "comments" && (
-          <div className="tab-content">
+          <TabsContent value="comments">
             <div className="comment-input-section">
               <textarea
                 placeholder="Add a comment... (use @ to mention someone)"
@@ -173,7 +198,9 @@ export default function TaskDetailModal({ task, onClose, setEditTaskId }) {
                 onChange={(e) => setNewComment(e.target.value)}
                 className="comment-textarea"
               />
-              <button className="add-comment-btn" onClick={handleAddComment}>Add Comment</button>
+              <button className="add-comment-btn" onClick={handleAddComment}>
+                Add Comment
+              </button>
             </div>
             {comments.map((comment, idx) => (
               <div className="comment" key={idx}>
@@ -182,87 +209,92 @@ export default function TaskDetailModal({ task, onClose, setEditTaskId }) {
                 <div className="comment-text">{comment.text}</div>
               </div>
             ))}
-          </div>
-        )}
+          </TabsContent>
 
-        {activeTab === "files" && (
-          <div
-            className="tab-content"
-            onDragOver={(e) => e.preventDefault()}
-            onDrop={(e) => {
-              e.preventDefault();
-              handleFileUpload(e.dataTransfer.files);
-            }}
-          >
-            <div className="upload-section file-drop-zone">
-              <label htmlFor="file-upload" className="upload-label">
-                Upload file or drag and drop here
-              </label>
-              <input
-                id="file-upload"
-                type="file"
-                style={{ display: "none" }}
-                multiple
-                onChange={(e) => handleFileUpload(e.target.files)}
-              />
+          <TabsContent value="files">
+            <div
+              className="tab-content"
+              onDragOver={(e) => e.preventDefault()}
+              onDrop={(e) => {
+                e.preventDefault();
+                handleFileUpload(e.dataTransfer.files);
+              }}
+            >
+              <div className="upload-section file-drop-zone">
+                <label htmlFor="file-upload" className="upload-label">
+                  Upload file or drag and drop here
+                </label>
+                <input
+                  id="file-upload"
+                  type="file"
+                  style={{ display: "none" }}
+                  multiple
+                  onChange={(e) => handleFileUpload(e.target.files)}
+                />
+              </div>
+
+              {uploadedFiles.length > 0 && (
+                <>
+                  <h5 className="attachment-heading">
+                    Attachments ({uploadedFiles.length})
+                  </h5>
+                  {uploadedFiles.map((entry, index) => (
+                    <div className="file-item" key={index}>
+                      <span className="file-name">{entry.file.name}</span>
+                      <button
+                        className="download-btn"
+                        onClick={() => {
+                          const link = document.createElement("a");
+                          link.href = entry.file.data;
+                          link.download = entry.file.name;
+                          document.body.appendChild(link);
+                          link.click();
+                          document.body.removeChild(link);
+                        }}
+                      >
+                        <Download />
+                      </button>
+                    </div>
+                  ))}
+                </>
+              )}
             </div>
-            {uploadedFiles.length > 0 && (
-              <>
-                <h5 className="attachment-heading">Attachments ({uploadedFiles.length})</h5>
-                {uploadedFiles.map((entry, index) => (
-                  <div className="file-item" key={index}>
-                    <span className="file-name">{entry.file.name}</span>
-                    <button
-                      className="download-btn"
-                      onClick={() => {
-                        const link = document.createElement("a");
-                        link.href = entry.file.data;
-                        link.download = entry.file.name;
-                        document.body.appendChild(link);
-                        link.click();
-                        document.body.removeChild(link);
-                      }}
-                    >
-                      <Download />
-                    </button>
-                  </div>
-                ))}
-              </>
-            )}
-          </div>
-        )}
+          </TabsContent>
 
-        {activeTab === "activity" && (
-          <div className="tab-content">
-            {combinedActivities.length === 0 ? (
-              <p>No activity yet.</p>
-            ) : (
-              <ul className="activity-list">
-                {combinedActivities.map((item, idx) => (
-                  <li key={idx} className="activity-item">
-                    <div className="activity-icon">
-                      {item.type === "comment" ? <BiCommentDetail /> : <BiPaperclip />}
-                    </div>
-                    <div className="activity-details">
-                      <div className="avatar-name-row">
-                        <div className="avatar-placeholder">
-                          <BiUser />
+          <TabsContent value="activity">
+            <div className="tab-content">
+              {combinedActivities.length === 0 ? (
+                <p>No activity yet.</p>
+              ) : (
+                <ul className="activity-list">
+                  {combinedActivities.map((item, idx) => (
+                    <li key={idx} className="activity-item">
+                      <div className="activity-icon">
+                        {item.type === "comment" ? (
+                          <BiCommentDetail />
+                        ) : (
+                          <BiPaperclip />
+                        )}
+                      </div>
+                      <div className="activity-details">
+                        <div className="avatar-name-row">
+                          <div className="avatar-placeholder"><BiUser /></div>
+                          <span className="author-name">{item.author}</span>
                         </div>
-                        <span className="author-name">{item.author}</span>
+                        <div className="activity-time">{timeAgo(item.date)}</div>
+                        <div className="activity-text">
+                          {item.type === "comment"
+                            ? "Commented: " + item.text
+                            : `Attached file: ${item.file.name}`}
+                        </div>
                       </div>
-                      <div className="activity-time">{timeAgo(item.date)}</div>
-                      <div className="activity-text">
-                        {item.type === "comment"
-                          ? "Commented: " + item.text
-                          : `Attached file: ${item.file.name}`}
-                      </div>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-        )}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   );

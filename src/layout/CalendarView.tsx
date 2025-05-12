@@ -1,7 +1,6 @@
 import React, { useState, useMemo } from "react";
 import "./Calendar.css";
 import { FcNext, FcPrevious } from "react-icons/fc";
-import { Dot } from "lucide-react";
 
 function CalendarView({ tasks }) {
   const [selectedDate, setSelectedDate] = useState(new Date());
