@@ -32,12 +32,12 @@ export default function BoardView({
                   } else if (progress === 100) {
                     computedStatus = "Done";
                   }
-
                   return { ...task, computedStatus };
                 })
                 .filter((task) => task.computedStatus === status).length})
             </h3>
-            <button className="text-var(--text) inline-flex justify-center items-center h-24 w-24 border-none cursor-pointer text-2xl"
+            <button className="text-var(--text) inline-flex justify-center
+            items-center h-24 w-24 border-none cursor-pointer text-2xl"
               onClick={() => setShowCreateModal(true)}
             >
               +

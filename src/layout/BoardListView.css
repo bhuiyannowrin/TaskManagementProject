@@ -74,14 +74,12 @@
     display: flex;
     gap: 4px;
     align-items: center;
-    background: #444;
     padding: 4px 8px;
     border-radius: 4px;
     font-size: 0.85rem;
-    color: #ddd;
+    color: #746f6f;
   }
-  
-  
+    
   .list-view {
     display: flex;
     flex-direction: column;

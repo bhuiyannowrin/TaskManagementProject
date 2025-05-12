@@ -128,7 +128,7 @@ export default function AddTask({ closeModal, addTask }: SubtaskItemProps) {
 
         <div className="form-group">
           <label>
-            Priority <span className="text-red-600">*</span>
+            Priority
           </label>
           <div className="priority-options">
             {["Low", "Medium", "High"].map((p) => (
