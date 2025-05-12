@@ -165,6 +165,7 @@ export default function Layout() {
                 <BiBell />
                 {notifications.length > 0 && (
                   <span className="badge">{notifications.length}</span>
+
                 )}
               </button>
               {showNotifications && (
@@ -184,7 +185,7 @@ export default function Layout() {
                       return (
                         <li
                           key={i}
-                          style={{ backgroundColor, padding: "10px" }}
+                          style={{ backgroundColor, borderRadius: "8px", padding: "10px" }}
                         >
                           {msg}
                         </li>
@@ -220,7 +221,7 @@ export default function Layout() {
             <div className="tab-group-right">
               <div className="dropdown-wrapper">
                 <button
-                  className="tab"
+                  className="inline-flex items-center justify-center gap-2 h-9 px-3 border-2"
                   onClick={() => setShowFilterMenu((prev) => !prev)}
                 >
                   Filter <FaChevronDown />

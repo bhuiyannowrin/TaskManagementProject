@@ -30,7 +30,6 @@ html.dark {
   --header-border: #333;
 }
 
-
 .app-container {
   background-color: var(--bg);
   color: var(--text);

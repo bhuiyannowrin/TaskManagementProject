@@ -44,7 +44,7 @@
 }
 
 .calendar-day.selected {
-  background-color: #011b18;
+  background-color: #000d0c;
   color: white;
   font-weight: bold;
 }
