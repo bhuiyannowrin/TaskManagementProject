@@ -6,7 +6,8 @@ const teamMembers = [
   {
     id: "user1",
     name: "Alex Johnson",
-    avatar: "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif",
+    avatar:
+      "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif",
     tasks: [
       {
         title: "Research competitors",
@@ -22,18 +23,20 @@ const teamMembers = [
       },
     ],
   },
-    {
+  {
     id: "user2",
     name: "Sam Taylor",
     avatar:
       "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif",
     tasks: [
+      
       {
         title: "Research competitors",
         status: "Todo",
         dueDate: "2023-06-15",
         priority: "M",
       },
+
       {
         title: "QA testing for v1.0",
         status: "Review",
@@ -80,19 +83,31 @@ const TeamView = () => {
         const filteredTasks = (status) =>
           status === "all"
             ? member.tasks
-            : member.tasks.filter((task) => task.status.toLowerCase() === status);
+            : member.tasks.filter(
+                (task) => task.status.toLowerCase() === status
+              );
 
         return (
-          <div key={member.id} className="bg-var(--bg) text-var(--text) rounded-lg p-4 shadow-lg border border-gray-800">
+          <div
+            key={member.id}
+            className="bg-var(--bg) text-var(--text) 
+          rounded-lg p-4 shadow-lg border
+           border-gray-800"
+          >
             <div className="flex items-center gap-4">
-              <img src={member.avatar} alt={member.name} className="w-14 h-14 rounded-full border" />
+              <img
+                src={member.avatar}
+                alt={member.name}
+                className="w-14 h-14 rounded-full border"
+              />
               <div>
                 <h2 className="text-lg font-semibold">{member.name}</h2>
-                <p className="text-gray-400 text-sm">{member.tasks.length} tasks</p>
+                <p className="text-gray-400 text-sm">
+                  {member.tasks.length} tasks
+                </p>
               </div>
             </div>
 
-            
             <div className="mt-4">
               <div className="flex justify-between text-sm mb-1">
                 <span className="text-var(--text)">Completion</span>
@@ -105,7 +120,6 @@ const TeamView = () => {
                 />
               </div>
             </div>
-
 
             <Tabs value={tab} onValueChange={setTab} className="mt-4">
               <TabsList className="flex justify-between bg-gray-800 rounded-md p-1 mb-2">
@@ -125,54 +139,73 @@ const TeamView = () => {
                   </TabsTrigger>
                 ))}
               </TabsList>
-              
-              {["all", "todo", "inprogress", "done"].map((val) => (
-                <TabsContent key={val} value={val}>
-                  {filteredTasks(val).map((task, index) => (
-                    <div
-                      key={index}
-                      className="bg-(--bg) rounded-lg p-3 mb-2 border border-gray-700"
-                    >
-                      <div className="flex justify-between items-center">
-                        <h3 className="font-medium">{task.title}</h3>
-                        <span className={`text-white text-xs px-2 py-1 rounded-full
-                        ${
-                            task.priority === "H"
-                              ? "bg-red-700 text-white"
-                              : task.priority === "M"
-                              ? "bg-blue-500 text-white"
-                              : task.priority === "L"
-                              ? "bg-green-700 text-purple-300"
-                              : "bg-black-700 text-white"
-                          }`}>
-                          {task.priority}
-                        </span>
-                      </div>
 
-                      <div className="flex justify-between items-center mt-2 text-sm text-gray-400">
-                        <span
-                          className={`px-2 py-0.5 rounded-full text-xs font-medium ${
-                            task.status === "Todo"
-                              ? "bg-gray-700 text-blue-300"
-                              : task.status === "Review"
-                              ? "bg-yellow-800 text-yellow-300"
-                              : task.status === "Done"
-                              ? "bg-green-700 text-green-300"
-                              : "bg-purple-700 text-purple-300"
-                          }`}
+              {["all", "todo", "inprogress", "done"].map((val) => {
+                const filteredTasks =
+                  val === "all"
+                    ? member.tasks
+                    : member.tasks.filter(
+                        (task) =>
+                          task.status.toLowerCase() === val.toLowerCase()
+                      );
+
+                return (
+                  <TabsContent key={val} value={val}>
+                    {filteredTasks.length === 0 &&
+                    (val === "inprogress" || val === "done") ? (
+                      <p className="text-sm text-gray-500">
+                        No tasks available
+                      </p>
+                    ) : (
+                      filteredTasks.map((task, index) => (
+                        <div
+                          key={index}
+                          className="bg-(--bg) rounded-lg p-3 mb-2 border border-gray-700"
                         >
-                          {task.status}
-                        </span>
+                          <div className="flex justify-between items-center">
+                            <h3 className="font-medium">{task.title}</h3>
+                            <span
+                              className={`text-white text-xs px-2 py-1 rounded-full
+                                ${
+                                  task.priority === "H"
+                                    ? "bg-red-700 text-white"
+                                    : task.priority === "M"
+                                    ? "bg-blue-500 text-white"
+                                    : task.priority === "L"
+                                    ? "bg-green-700 text-purple-300"
+                                    : "bg-black-700 text-white"
+                                }`}
+                            >
+                              {task.priority}
+                            </span>
+                          </div>
 
-                        <div className="flex items-center gap-1">
-                          <BiCalendarEvent />
-                          <span>{task.dueDate}</span>
+                          <div className="flex justify-between items-center mt-2 text-sm text-gray-400">
+                            <span
+                              className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+                                task.status === "Todo"
+                                  ? "bg-gray-700 text-blue-300"
+                                  : task.status === "Review"
+                                  ? "bg-yellow-800 text-yellow-300"
+                                  : task.status === "Done"
+                                  ? "bg-green-700 text-green-300"
+                                  : "bg-purple-700 text-purple-300"
+                              }`}
+                            >
+                              {task.status}
+                            </span>
+
+                            <div className="flex items-center gap-1">
+                              <BiCalendarEvent />
+                              <span>{task.dueDate}</span>
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                  ))}
-                </TabsContent>
-              ))}
+                      ))
+                    )}
+                  </TabsContent>
+                );
+              })}
             </Tabs>
           </div>
         );
