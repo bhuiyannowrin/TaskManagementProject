@@ -1,5 +1,5 @@
 .team-view-container {
-    display: grid;
+    display: -ms-grid;
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
     gap: 16px;
     padding: 20px;
@@ -10,16 +10,16 @@
     border-radius: 12px;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     padding: 16px;
-    display: flex;
+    display: -ms-flexbox;
     align-items: center;
-    gap: 12px;
+    gap: 24px;
     transition: transform 0.2s;
   }
   
   .team-card:hover {
     transform: translateY(-4px);
   }
-  
+
   .avatar-container {
     position: relative;
   }
