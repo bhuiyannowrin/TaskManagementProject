@@ -72,7 +72,6 @@ export default function ListView({
                     onClick={(e) => e.stopPropagation()}
                   >
                     <button
-                      className="tab"
                       onClick={() => handleThreeDotsClick(task.id)}
                     >
                       <BsThreeDotsVertical />

@@ -1,82 +1,182 @@
-import React from "react";
-import "./TeamView.css";
+import React, { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { BiCalendarEvent } from "react-icons/bi";
 
 const teamMembers = [
   {
     id: "user1",
     name: "Alex Johnson",
-    avatar:
-      "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif",
-    taskno: 2,
+    avatar: "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif",
+    tasks: [
+      {
+        title: "Research competitors",
+        status: "Todo",
+        dueDate: "2023-06-15",
+        priority: "M",
+      },
+      {
+        title: "QA testing for v1.0",
+        status: "Review",
+        dueDate: "2023-06-07",
+        priority: "H",
+      },
+    ],
   },
-  {
+    {
     id: "user2",
     name: "Sam Taylor",
     avatar:
       "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif",
-    taskno: 4,
+    tasks: [
+      {
+        title: "Research competitors",
+        status: "Todo",
+        dueDate: "2023-06-15",
+        priority: "M",
+      },
+      {
+        title: "QA testing for v1.0",
+        status: "Review",
+        dueDate: "2023-06-07",
+        priority: "H",
+      },
+    ],
   },
   {
     id: "user3",
     name: "Jamie Smith",
     avatar:
       "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif",
-    taskno: 6,
+    tasks: [
+      {
+        title: "Research competitors",
+        status: "Todo",
+        dueDate: "2023-06-15",
+        priority: "M",
+      },
+      {
+        title: "QA testing for v1.0",
+        status: "Review",
+        dueDate: "2023-06-07",
+        priority: "H",
+      },
+    ],
   },
 ];
 
 const TeamView = () => {
+  const getCompletion = (tasks) => {
+    const total = tasks.length;
+    const done = tasks.filter((t) => t.status === "Done").length;
+    return total === 0 ? 0 : Math.round((done / total) * 100);
+  };
 
   return (
-    <div className="team-view-container">
-      {teamMembers.map((member) => (
-        <div className="team-card">
-          <div key={member.id} className="flex gap-2">
-            <div className="avatar-container">
-              <img src={member.avatar} alt={member.name} className="avatar" />
-            </div>
-            <div className="member-info">
-              <h1>
-                <strong>{member.name}</strong>
-              </h1>
-              <p>{member.taskno} Tasks</p>
-            </div>
-          </div>
+    <div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-6">
+      {teamMembers.map((member) => {
+        const completion = getCompletion(member.tasks);
+        const [tab, setTab] = useState("all");
 
-          <div className="pt-6">
-            <Tabs defaultValue="all" className="w-100">
-              <TabsList className="inline-flex gap-0 justify-center p-1">
-                <TabsTrigger value="all" className="px-3 py-1 rounded text-gray-800 hover:bg-gray-700">
-                    All
-                </TabsTrigger>
-                <TabsTrigger value="todo" className="px-3 py-1 rounded text-gray-800 hover:bg-gray-700">
-                    To do
-                </TabsTrigger>
-                <TabsTrigger value="inprogress" className="px-3 py-1 rounded text-gray-800 hover:bg-gray-700">
-                    In Progress
-                </TabsTrigger>
-                <TabsTrigger value="done" className="px-3 py-1 rounded text-gray-800 hover:bg-gray-700">
-                    Done
-                </TabsTrigger>
+        const filteredTasks = (status) =>
+          status === "all"
+            ? member.tasks
+            : member.tasks.filter((task) => task.status.toLowerCase() === status);
+
+        return (
+          <div key={member.id} className="bg-var(--bg) text-var(--text) rounded-lg p-4 shadow-lg border border-gray-800">
+            <div className="flex items-center gap-4">
+              <img src={member.avatar} alt={member.name} className="w-14 h-14 rounded-full border" />
+              <div>
+                <h2 className="text-lg font-semibold">{member.name}</h2>
+                <p className="text-gray-400 text-sm">{member.tasks.length} tasks</p>
+              </div>
+            </div>
+
+            
+            <div className="mt-4">
+              <div className="flex justify-between text-sm mb-1">
+                <span className="text-var(--text)">Completion</span>
+                <span className="var(--text)">{completion}%</span>
+              </div>
+              <div className="w-full h-2 bg-gray-800 rounded">
+                <div
+                  className="h-2 bg-green-500 rounded"
+                  style={{ width: `${completion}%` }}
+                />
+              </div>
+            </div>
+
+
+            <Tabs value={tab} onValueChange={setTab} className="mt-4">
+              <TabsList className="flex justify-between bg-gray-800 rounded-md p-1 mb-2">
+                {["all", "todo", "inprogress", "done"].map((val) => (
+                  <TabsTrigger
+                    key={val}
+                    value={val}
+                    className="text-white px-3 py-1 rounded-md data-[state=active]:bg-gray-900 data-[state=active]:font-bold"
+                  >
+                    {val === "all"
+                      ? "All"
+                      : val === "todo"
+                      ? "To Do"
+                      : val === "inprogress"
+                      ? "In Progress"
+                      : "Done"}
+                  </TabsTrigger>
+                ))}
               </TabsList>
+              
+              {["all", "todo", "inprogress", "done"].map((val) => (
+                <TabsContent key={val} value={val}>
+                  {filteredTasks(val).map((task, index) => (
+                    <div
+                      key={index}
+                      className="bg-(--bg) rounded-lg p-3 mb-2 border border-gray-700"
+                    >
+                      <div className="flex justify-between items-center">
+                        <h3 className="font-medium">{task.title}</h3>
+                        <span className={`text-white text-xs px-2 py-1 rounded-full
+                        ${
+                            task.priority === "H"
+                              ? "bg-red-700 text-white"
+                              : task.priority === "M"
+                              ? "bg-blue-500 text-white"
+                              : task.priority === "L"
+                              ? "bg-green-700 text-purple-300"
+                              : "bg-black-700 text-white"
+                          }`}>
+                          {task.priority}
+                        </span>
+                      </div>
 
-              <TabsContent value="all">
-                <h2>All tasks for {member.name}</h2>
-              </TabsContent>
-              <TabsContent value="todo">
-                <h2>{member.taskno} Todo tasks</h2>
-              </TabsContent>
-              <TabsContent value="inprogress">
-                <h2>In Progress tasks for {member.name}</h2>
-              </TabsContent>
-              <TabsContent value="done">
-                <h2> Done tasks for {member.name}</h2>
-              </TabsContent>
+                      <div className="flex justify-between items-center mt-2 text-sm text-gray-400">
+                        <span
+                          className={`px-2 py-0.5 rounded-full text-xs font-medium ${
+                            task.status === "Todo"
+                              ? "bg-gray-700 text-blue-300"
+                              : task.status === "Review"
+                              ? "bg-yellow-800 text-yellow-300"
+                              : task.status === "Done"
+                              ? "bg-green-700 text-green-300"
+                              : "bg-purple-700 text-purple-300"
+                          }`}
+                        >
+                          {task.status}
+                        </span>
+
+                        <div className="flex items-center gap-1">
+                          <BiCalendarEvent />
+                          <span>{task.dueDate}</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </TabsContent>
+              ))}
             </Tabs>
           </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 };
