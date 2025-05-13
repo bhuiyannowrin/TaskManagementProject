@@ -147,7 +147,7 @@ export default function Layout() {
           <div className="header-right">
             <input
               type="text"
-              className="search-input"
+              className=""
               placeholder="Search..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
