@@ -229,7 +229,7 @@ export default function Layout({ onLogout }) {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button className="border-2 rounded-2xl"> 
-                  <FaUserCircle size={40} className="text-black" />
+                  <FaUserCircle size={40} className="text-var(--text)" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56">
