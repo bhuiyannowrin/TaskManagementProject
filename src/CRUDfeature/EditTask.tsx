@@ -86,6 +86,7 @@ export default function EditTask({ closeModal, task, updateTask }) {
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
+            className="p-2 border border-[#555] rounded-[6px] bg-[#222] text-white"
           />
         </div>
 
@@ -94,6 +95,7 @@ export default function EditTask({ closeModal, task, updateTask }) {
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
+            className="p-2 border border-[#555] rounded-[6px] bg-[#222] text-white"
           />
         </div>
 
@@ -120,6 +122,7 @@ export default function EditTask({ closeModal, task, updateTask }) {
             type="date"
             value={dueDate}
             onChange={(e) => setDueDate(e.target.value)}
+            className="p-2 border border-[#555] rounded-[6px] bg-[#222] text-white"
           />
         </div>
 
@@ -193,6 +196,7 @@ export default function EditTask({ closeModal, task, updateTask }) {
                                 handleSubtaskChange(index, e.target.value)
                               }
                               placeholder="Subtask Title"
+                              className="p-2 border border-[#555] rounded-[6px] bg-[#222] text-white"
                             />
                             <button
                               onClick={() => removeSubtask(index)}

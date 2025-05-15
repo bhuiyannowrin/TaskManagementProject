@@ -55,7 +55,7 @@ h2 {
   text-align: left;
 }
 
-input[type="text"],
+/* input[type="text"],
 input[type="date"],
 textarea {
   padding: 0.5rem;
@@ -67,7 +67,7 @@ textarea {
 
 textarea {
   resize: vertical;
-}
+} */
 
 .priority-options {
   display: flex;

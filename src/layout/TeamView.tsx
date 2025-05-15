@@ -29,17 +29,17 @@ const teamMembers = [
     avatar:
       "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif",
     tasks: [
-      
+
       {
         title: "Research competitors",
         status: "Todo",
         dueDate: "2023-06-15",
-        priority: "M",
+        priority: "L",
       },
 
       {
         title: "QA testing for v1.0",
-        status: "Review",
+        status: "In Progress",
         dueDate: "2023-06-07",
         priority: "H",
       },
@@ -54,17 +54,31 @@ const teamMembers = [
       {
         title: "Research competitors",
         status: "Todo",
-        dueDate: "2023-06-15",
+        dueDate: "2025-06-15",
         priority: "M",
       },
       {
         title: "QA testing for v1.0",
         status: "Review",
-        dueDate: "2023-06-07",
+        dueDate: "2025-06-07",
         priority: "H",
       },
     ],
   },
+  {
+    id: "user4",
+    name: "Smith",
+    avatar:
+    "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif",
+    tasks:[
+      {
+        title: "Task 1",
+        status: "In Progress",
+        dueDate: "2025-06-15",
+        priority: "L",
+      }
+    ]
+  }
 ];
 
 const TeamView = () => {
@@ -80,19 +94,10 @@ const TeamView = () => {
         const completion = getCompletion(member.tasks);
         const [tab, setTab] = useState("all");
 
-        const filteredTasks = (status) =>
-          status === "all"
-            ? member.tasks
-            : member.tasks.filter(
-                (task) => task.status.toLowerCase() === status
-              );
-
         return (
           <div
             key={member.id}
-            className="bg-var(--bg) text-var(--text) 
-          rounded-lg p-4 shadow-lg border
-           border-gray-800"
+            className="bg-var(--bg) text-var(--text) rounded-lg p-4 shadow-lg border border-gray-800"
           >
             <div className="flex items-center gap-4">
               <img
@@ -127,7 +132,8 @@ const TeamView = () => {
                   <TabsTrigger
                     key={val}
                     value={val}
-                    className="text-white px-3 py-1 rounded-md data-[state=active]:bg-gray-900 data-[state=active]:font-bold"
+                    className="text-white px-3 py-1 rounded-md data-[state=active]:bg-gray-900 data-[state=active]:font-bold
+                    "
                   >
                     {val === "all"
                       ? "All"

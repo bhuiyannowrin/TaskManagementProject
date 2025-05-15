@@ -161,7 +161,7 @@ export default function TaskDetailModal({ task, onClose, setEditTaskId }) {
                 <BiUser /> XYZ
               </span>
               <span>
-                <BiMessage /> {comments.length} comments
+                <BiMessage /> ({comments.length}) comments
               </span>
               <span>
                 <BiFile /> {uploadedFiles.length} files

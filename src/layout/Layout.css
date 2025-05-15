@@ -71,10 +71,10 @@ html.dark {
 .search {
   padding: 0.4rem 0.75rem;
   border-radius: 4px;
-  border: none;
+  border: solid #e0dfdf;
   outline: none;
-  background-color: red;
-  color: white;
+  background-color: var(--bg);
+  color: var(--text);
 }
 
 .icon-btn {

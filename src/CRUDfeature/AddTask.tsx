@@ -109,6 +109,7 @@ export default function AddTask({ closeModal, addTask }: SubtaskItemProps) {
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
+            className="p-2 border border-[#555] rounded-[6px] bg-[#222] text-white"
           />
           {formErrors.title && <p className="text-red-600 mt-1 text-left">{formErrors.title}</p>}
         </div>
@@ -120,6 +121,7 @@ export default function AddTask({ closeModal, addTask }: SubtaskItemProps) {
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
+            className="p-2 border border-[#555] rounded-[6px] bg-[#222] text-white"
           />
           {formErrors.description && (
             <p className="text-red-600 mt-1 text-left">{formErrors.description}</p>
@@ -153,6 +155,7 @@ export default function AddTask({ closeModal, addTask }: SubtaskItemProps) {
             type="date"
             value={dueDate}
             onChange={(e) => setDueDate(e.target.value)}
+            className="p-2 border border-[#555] rounded-[6px] bg-[#222] text-white"
           />
           {formErrors.dueDate && (
             <p className="text-red-600 mt-1 text-left">{formErrors.dueDate}</p>
@@ -216,6 +219,7 @@ export default function AddTask({ closeModal, addTask }: SubtaskItemProps) {
                                 handleSubtaskChange(index, e.target.value)
                               }
                               placeholder="Subtask Title"
+                              className="p-2 border border-[#555] rounded-[6px] bg-[#222] text-white"
                             />
 
                             <button

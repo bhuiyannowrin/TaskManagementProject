@@ -4,8 +4,8 @@ import "./BoardListView.css";
 import DarkLightSwitch from "./DarkLightSwitch";
 import { BiBell } from "react-icons/bi";
 import { FiSettings } from "react-icons/fi";
-import { FaChevronDown } from "react-icons/fa";
-import { LayoutGrid, List, Calendar, Users } from "lucide-react";
+import { FaChevronDown, FaUserCircle } from "react-icons/fa";
+import { LayoutGrid, List, Calendar, Users, Search } from "lucide-react";
 import AddTask from "../CRUDfeature/AddTask";
 import { taskFilter, taskSort } from "./Types";
 import BoardView from "./BoardView";
@@ -16,7 +16,23 @@ import EditTask from "../CRUDfeature/EditTask";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import TeamView from "./TeamView";
 
-export default function Layout() {
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuPortal,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+
+export default function Layout({ onLogout }) {
   const [tasks, setTasks] = useState(() => {
     const saved = localStorage.getItem("tasks");
     return saved ? JSON.parse(saved) : [];
@@ -136,7 +152,7 @@ export default function Layout() {
     { key: "board", label: "Board", icon: <LayoutGrid size={16} /> },
     { key: "list", label: "List", icon: <List size={16} /> },
     { key: "calendar", label: "Calendar", icon: <Calendar size={16} /> },
-    { key: "team", label: "Team", icon: <Users size={16} /> }
+    { key: "team", label: "Team", icon: <Users size={16} /> },
   ];
 
   return (
@@ -145,13 +161,17 @@ export default function Layout() {
         <div className="header-top">
           <h1 className="logo">TaskMaster</h1>
           <div className="header-right">
-            <input
-              type="text"
-              className=""
-              placeholder="Search..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-            />
+            <div className="relative hidden md:block border-2 border-gray-400 rounded-sm">
+              <Search className="absolute left-2.5 top-1 h-4 w-4 text-muted-foreground" />
+              <input
+                type="search"
+                placeholder="Search tasks..."
+                className="w-64 pl-8"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+
             <button className="icon-btn">
               <DarkLightSwitch />
             </button>
@@ -164,7 +184,6 @@ export default function Layout() {
                 <BiBell />
                 {notifications.length > 0 && (
                   <span className="badge">{notifications.length}</span>
-
                 )}
               </button>
               {showNotifications && (
@@ -184,7 +203,11 @@ export default function Layout() {
                       return (
                         <li
                           key={i}
-                          style={{ backgroundColor, borderRadius: "8px", padding: "10px" }}
+                          style={{
+                            backgroundColor,
+                            borderRadius: "8px",
+                            padding: "10px",
+                          }}
                         >
                           {msg}
                         </li>
@@ -203,6 +226,55 @@ export default function Layout() {
             >
               + New Task
             </button>
+
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button className="border-2 rounded-2xl"> 
+                  <FaUserCircle size={40} className="text-black" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-56">
+                <DropdownMenuLabel> Account </DropdownMenuLabel>
+                <DropdownMenuGroup>
+                  <DropdownMenuItem> Switch Account </DropdownMenuItem>
+                  <DropdownMenuItem> Manage Profile </DropdownMenuItem>
+                </DropdownMenuGroup>
+                <DropdownMenuSeparator />
+                <DropdownMenuLabel> Task Master </DropdownMenuLabel>
+                <DropdownMenuGroup>
+                  <DropdownMenuItem> Profile and visibility </DropdownMenuItem>
+                  <DropdownMenuItem> Activity </DropdownMenuItem>
+                  <DropdownMenuItem> Cards </DropdownMenuItem>
+                  <DropdownMenuItem> Settings </DropdownMenuItem>
+                </DropdownMenuGroup>
+                <DropdownMenuSeparator />
+                <DropdownMenuGroup>
+                  <DropdownMenuSub>
+                    <DropdownMenuSubTrigger>
+                      Theme
+                    </DropdownMenuSubTrigger>
+                    <DropdownMenuPortal>
+                      <DropdownMenuSubContent>
+                        <DropdownMenuItem> Light</DropdownMenuItem>
+                        <DropdownMenuItem> Dark</DropdownMenuItem>
+                        <DropdownMenuItem> Match System</DropdownMenuItem>
+                      </DropdownMenuSubContent>
+                    </DropdownMenuPortal>
+                  </DropdownMenuSub>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem>
+                    Create Workspace
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem> Help</DropdownMenuItem>
+                <DropdownMenuItem> Shortcut</DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={onLogout}>
+                  Logout
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
 
@@ -210,7 +282,11 @@ export default function Layout() {
           <div className="header-bottom">
             <TabsList className="inline-flex h-10 items-center justify-center rounded-md bg-muted p-1 text-muted-foreground">
               {views.map((v) => (
-                <TabsTrigger key={v.key} value={v.key} className="outline-none m-1 p-1 border-0 focus:border-0 bg-transparent">
+                <TabsTrigger
+                  key={v.key}
+                  value={v.key}
+                  className="outline-none m-1 p-1 border-0 focus:border-0 bg-transparent"
+                >
                   {v.icon}
                   <span>{v.label}</span>
                 </TabsTrigger>
@@ -245,7 +321,6 @@ export default function Layout() {
               <div className="dropdown-wrapper">
                 <button
                   className="inline-flex items-center justify-center gap-2 h-9 px-3 border-2"
-
                   onClick={() => setShowSortMenu((prev) => !prev)}
                 >
                   Sort <FaChevronDown />
@@ -295,7 +370,7 @@ export default function Layout() {
           </TabsContent>
 
           <TabsContent value="team">
-            <TeamView/>
+            <TeamView />
           </TabsContent>
         </Tabs>
       </div>
