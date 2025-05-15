@@ -25,7 +25,7 @@ const Login = ({ setUser }) => {
         Log in to continue
       </h2>
       <form onSubmit={handleSubmit(onSubmit)} className="p-6 space-y-6">
-        <div className="flex flex-col">
+        <div className="flex flex-col *:w-full max-w-md">
           <label className="text-left text-black font-medium mb-2">Email</label>
           <input
             type="email"
@@ -36,7 +36,6 @@ const Login = ({ setUser }) => {
                   value: /^[a-zA-Z0-9]+@[a-zA-Z0-9]+\.(com|io|edu|org)$/i,
                   message: "Email is invalid, must be ends with .com or edu or org or io"
                 }
-
               })}
           />
           {errors.email && (
@@ -44,7 +43,7 @@ const Login = ({ setUser }) => {
           )}
         </div>
 
-        <div className="flex flex-col">
+        <div className="flex flex-col w-full max-w-md">
           <label className="text-left text-black font-medium mb-2">Password</label>
           <input
             type="password"

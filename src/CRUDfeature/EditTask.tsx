@@ -69,7 +69,7 @@ export default function EditTask({ closeModal, task, updateTask }) {
     closeModal();
   };
 
-  // Dynamically calculate background color for the progress bar
+
   const progressBackground = `linear-gradient(to right, #4caf50 ${progress}%, #ddd ${progress}%)`;
 
   return (
@@ -86,7 +86,7 @@ export default function EditTask({ closeModal, task, updateTask }) {
             type="text"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            className="p-2 border border-[#555] rounded-[6px] bg-[#222] text-white"
+            className="p-2 border border-[#555] rounded-[6px] bg-var(--bg) text-var(--text)"
           />
         </div>
 
@@ -95,7 +95,7 @@ export default function EditTask({ closeModal, task, updateTask }) {
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="p-2 border border-[#555] rounded-[6px] bg-[#222] text-white"
+            className="p-2 border border-[#555] rounded-[6px] bg-var(--bg) text-var(--text)"
           />
         </div>
 
@@ -122,7 +122,7 @@ export default function EditTask({ closeModal, task, updateTask }) {
             type="date"
             value={dueDate}
             onChange={(e) => setDueDate(e.target.value)}
-            className="p-2 border border-[#555] rounded-[6px] bg-[#222] text-white"
+            className="p-2 border border-[#555] rounded-[6px] bg-var(--bg) text-var(--text)"
           />
         </div>
 
@@ -196,7 +196,7 @@ export default function EditTask({ closeModal, task, updateTask }) {
                                 handleSubtaskChange(index, e.target.value)
                               }
                               placeholder="Subtask Title"
-                              className="p-2 border border-[#555] rounded-[6px] bg-[#222] text-white"
+                              className="p-2 border border-[#555] rounded-[6px] bg-var(--bg) text-var(--text)"
                             />
                             <button
                               onClick={() => removeSubtask(index)}

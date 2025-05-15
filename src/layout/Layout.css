@@ -14,6 +14,9 @@
   --header-border: #ccc;
   --tasksidebar-bg: #e4dfdf;
   --tasksidebar-brderleft: #3b3939;
+  --st-bg: #f1eded;
+  --st-text: #000000;
+  --pr: #b0adad;
 }
 
 html.dark {
@@ -31,7 +34,10 @@ html.dark {
   --dropdown-hover: #555;
   --header-border: #333;
   --tasksidebar-bg: #3b3939;
-  --tasksidebar-brderleft: #ddd
+  --tasksidebar-brderleft: #ddd;
+   --st-bg: #2c2a2a;
+  --st-text: #ffffff;
+  --pr: #3b3939;
 }
 
 .app-container {

@@ -118,7 +118,7 @@ const TeamView = () => {
                 <span className="text-var(--text)">Completion</span>
                 <span className="var(--text)">{completion}%</span>
               </div>
-              <div className="w-full h-2 bg-gray-800 rounded">
+              <div className="w-full h-2 border-2 rounded">
                 <div
                   className="h-2 bg-green-500 rounded"
                   style={{ width: `${completion}%` }}
@@ -132,8 +132,10 @@ const TeamView = () => {
                   <TabsTrigger
                     key={val}
                     value={val}
-                    className="text-white px-3 py-1 rounded-md data-[state=active]:bg-gray-900 data-[state=active]:font-bold
-                    "
+                    className="px-3 py-1 rounded-md
+                     data-[state=active]:bg-gray-900 
+                     data-[state=active]:font-bold
+                     data-[state=active]:text-white"
                   >
                     {val === "all"
                       ? "All"
