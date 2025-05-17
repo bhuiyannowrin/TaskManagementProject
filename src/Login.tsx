@@ -27,7 +27,7 @@ const Login = ({ setUser }) => {
           Log in to continue
         </h2>
         <form onSubmit={handleSubmit(onSubmit)} className="pl-6 space-y-6">
-          <div className="w-full max-w-md">
+          <div className="w-full h-[90px]">
             <label className="text-left text-black font-medium mb-2">
               Email
             </label>
@@ -49,7 +49,7 @@ const Login = ({ setUser }) => {
             )}
           </div>
 
-          <div className="w-full">
+          <div className="w-full h-[90px]">
             <label className="text-left text-black font-medium mb-2">
               Password
             </label>
