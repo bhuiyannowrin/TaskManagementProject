@@ -171,7 +171,7 @@ useEffect(() => {
     <div className="app-container">
       <div className="app-header">
         <div className="header-top">
-          <h1 className="logo">TaskMaster</h1>
+          <h1 className="logo"> TaskMaster </h1>
           <div className="header-right">
             <div className="relative hidden md:block border-2 border-gray-400 rounded-sm">
               <Search className="absolute left-2.5 top-1 h-4 w-4 text-muted-foreground" />
@@ -223,6 +223,7 @@ useEffect(() => {
                           }}
                         >
                           {msg}
+                          
                         </li>
                       );
                     })}
@@ -232,6 +233,9 @@ useEffect(() => {
             </div>
             <button className="icon-btn">
               <FiSettings />
+            </button>
+            <button>
+              
             </button>
             <button
               className="new-task-btn"
@@ -248,7 +252,7 @@ useEffect(() => {
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56">
                 <DropdownMenuLabel> Account </DropdownMenuLabel>
-                <DropdownMenuItem> 
+                <DropdownMenuItem>
                   <FaUserCircle size={30} className="text-var(--text)" />                  
                   <p>{user.email}</p>
                 </DropdownMenuItem>
