@@ -167,9 +167,6 @@ useEffect(() => {
   localStorage.setItem("theme", theme);
 }, [theme]);
 
-
-
-
   return (
     <div className="app-container">
       <div className="app-header">
@@ -252,7 +249,7 @@ useEffect(() => {
               <DropdownMenuContent className="w-56">
                 <DropdownMenuLabel> Account </DropdownMenuLabel>
                 <DropdownMenuItem> 
-                  <FaUserCircle size={30} className="text-white" />                  
+                  <FaUserCircle size={30} className="text-var(--text)" />                  
                   <p>{user.email}</p>
                 </DropdownMenuItem>
                 <DropdownMenuGroup>
