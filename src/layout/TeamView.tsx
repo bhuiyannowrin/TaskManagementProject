@@ -133,7 +133,7 @@ const TeamView = () => {
                     key={val}
                     value={val}
                     className="px-3 py-1 rounded-md
-                     data-[state=active]:bg-gray-900 
+                     data-[state=active]:bg-gray-900
                      data-[state=active]:font-bold
                      data-[state=active]:text-white"
                   >

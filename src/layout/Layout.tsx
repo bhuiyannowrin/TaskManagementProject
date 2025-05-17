@@ -31,7 +31,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-export default function Layout({ onLogout }) {
+export default function Layout({ onLogout, user }) {
   const [tasks, setTasks] = useState(() => {
     const saved = localStorage.getItem("tasks");
     return saved ? JSON.parse(saved) : [];
@@ -154,6 +154,22 @@ export default function Layout({ onLogout }) {
     { key: "team", label: "Team", icon: <Users size={16} /> },
   ];
 
+  const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
+
+useEffect(() => {
+  if (theme === "dark") {
+    document.documentElement.classList.add("dark");
+    document.documentElement.classList.remove("light");
+  } else {
+    document.documentElement.classList.add("light");
+    document.documentElement.classList.remove("dark");
+  }
+  localStorage.setItem("theme", theme);
+}, [theme]);
+
+
+
+
   return (
     <div className="app-container">
       <div className="app-header">
@@ -172,7 +188,8 @@ export default function Layout({ onLogout }) {
             </div>
 
             <button className="icon-btn">
-              <DarkLightSwitch />
+              <DarkLightSwitch theme={theme} setTheme={setTheme} />
+
             </button>
             <div className="notification-wrapper">
               <button
@@ -234,17 +251,21 @@ export default function Layout({ onLogout }) {
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56">
                 <DropdownMenuLabel> Account </DropdownMenuLabel>
+                <DropdownMenuItem> 
+                  <FaUserCircle size={30} className="text-white" />                  
+                  <p>{user.email}</p>
+                </DropdownMenuItem>
                 <DropdownMenuGroup>
-                  <DropdownMenuItem> Switch Account </DropdownMenuItem>
-                  <DropdownMenuItem> Manage Profile </DropdownMenuItem>
+                  <DropdownMenuItem disabled> Switch Account </DropdownMenuItem>
+                  <DropdownMenuItem disabled> Manage Profile </DropdownMenuItem>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
                 <DropdownMenuLabel> Task Master </DropdownMenuLabel>
                 <DropdownMenuGroup>
-                  <DropdownMenuItem> Profile and visibility </DropdownMenuItem>
-                  <DropdownMenuItem> Activity </DropdownMenuItem>
-                  <DropdownMenuItem> Cards </DropdownMenuItem>
-                  <DropdownMenuItem> Settings </DropdownMenuItem>
+                  <DropdownMenuItem disabled> Profile and visibility </DropdownMenuItem>
+                  <DropdownMenuItem disabled> Activity </DropdownMenuItem>
+                  <DropdownMenuItem disabled> Cards </DropdownMenuItem>
+                  <DropdownMenuItem disabled> Settings </DropdownMenuItem>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
@@ -254,20 +275,19 @@ export default function Layout({ onLogout }) {
                     </DropdownMenuSubTrigger>
                     <DropdownMenuPortal>
                       <DropdownMenuSubContent>
-                        <DropdownMenuItem> Light</DropdownMenuItem>
-                        <DropdownMenuItem> Dark</DropdownMenuItem>
-                        <DropdownMenuItem> Match System</DropdownMenuItem>
+                        <DropdownMenuItem onClick={()=> setTheme("light")}> Light</DropdownMenuItem>
+                        <DropdownMenuItem onClick={()=> setTheme("dark")}> Dark</DropdownMenuItem>
                       </DropdownMenuSubContent>
                     </DropdownMenuPortal>
                   </DropdownMenuSub>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setShowCreateModal(true)}>
                     Create Workspace
                   </DropdownMenuItem>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem> Help</DropdownMenuItem>
-                <DropdownMenuItem> Shortcut</DropdownMenuItem>
+                <DropdownMenuItem disabled> Help</DropdownMenuItem>
+                <DropdownMenuItem disabled> Shortcut</DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={onLogout}>
                   Logout
