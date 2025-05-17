@@ -123,7 +123,6 @@ export default function TaskDetailModal({ task, onClose, setEditTaskId }) {
         <Tabs value={activeTab} onValueChange={setActiveTab} className="mt-4">
           <TabsList className="flex gap-2 w-full justify-start">
             <TabsTrigger value="details">Details</TabsTrigger>
-
             <TabsTrigger value="comments">
               Comments
               {comments.length > 0 && (

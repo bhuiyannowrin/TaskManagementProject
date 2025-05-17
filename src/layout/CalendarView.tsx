@@ -152,10 +152,10 @@ function CalendarView({ tasks }) {
                 }
             ${
               isSelected
-                ? "bg-green-900 text-white font-bold"
+                ? "bg-green-800 text-white font-bold"
                 : isToday
                 ? "bg-cyan-100 text-black"
-                : "bg-white text-black"
+                : "bg-var(--bg) text-var(--text)"
             }
           `}
                 onClick={() => date && handleDateClick(date)}

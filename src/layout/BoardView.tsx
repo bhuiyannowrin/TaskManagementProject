@@ -1,7 +1,8 @@
-import { BsThreeDots} from "react-icons/bs";
+import { useEffect, useState } from "react";
+import { BsThreeDots } from "react-icons/bs";
 import { BiCalendarEvent } from "react-icons/bi";
-import { threeDotsOptions} from "./Types";
 import { FiTag } from "react-icons/fi";
+import {threeDotsOptions } from "./Types";
 
 export default function BoardView({
   filteredTasks,
@@ -11,61 +12,101 @@ export default function BoardView({
   setShowCreateModal,
   setSelectedTask,
   updateTask,
-
 }) {
+  const [tasks, setTasks] = useState([]);
+
+  useEffect(() => {
+    setTasks(filteredTasks);
+  }, [filteredTasks]);
+
+  const handleDragStart = (e, taskId) => {
+    e.dataTransfer.setData("text/plain", taskId);
+  };
+
+  const handleDrop = (e, newStatus) => {
+    e.preventDefault();
+    const taskId = e.dataTransfer.getData("text/plain");
+    const task = tasks.find((t) => t.id.toString() === taskId);
+    if (!task || task.status === newStatus) return;
+
+    const progressByStatus = {
+      Todo: 0,
+      "In Progress": 31,
+      Review: 95,
+      Done: 100,
+    };
+
+    const updatedTask = {
+      ...task,
+      status: newStatus,
+      progress: progressByStatus[newStatus],
+      updatedAt: new Date().toISOString(),
+    };
+
+    const updatedTasks = tasks.map((t) => (t.id === task.id ? updatedTask : t));
+
+    setTasks(updatedTasks);
+    updateTask(updatedTask);
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+  };
+
+  const getComputedStatus = (task) => {
+    const progress = task.progress || 0;
+    if (progress >= 31 && progress < 90) return "In Progress";
+    if (progress >= 90 && progress < 100) return "Review";
+    if (progress === 100) return "Done";
+    return "Todo";
+  };
+
   return (
     <div className="board-view">
       {["Todo", "In Progress", "Review", "Done"].map((status) => (
-        <div key={status} className="board-column">
-          <div className="flex items-center gap-8">
-            <h3 className="m-0 text-var(--text) font-bold" >
+        <div
+          key={status}
+          className="board-column"
+          onDragOver={handleDragOver}
+          onDrop={(e) => handleDrop(e, status)}
+        >
+          <div className="flex flex-nowrap items-center gap-8">
+            <h3 className="m-0 text-var(--text) font-bold">
               {status} (
-              {filteredTasks
-                .map((task) => {
-                  let computedStatus = task.status;
-                  const progress = task.progress || 0;
-
-                  if (progress >= 31 && progress < 90) {
-                    computedStatus = "In Progress";
-                  } else if (progress >= 90 && progress < 100) {
-                    computedStatus = "Review";
-                  } else if (progress === 100) {
-                    computedStatus = "Done";
-                  }
-                  return { ...task, computedStatus };
-                })
-                .filter((task) => task.computedStatus === status).length})
+              {
+                tasks
+                  .map((task) => ({
+                    ...task,
+                    computedStatus: getComputedStatus(task),
+                  }))
+                  .filter((task) => task.computedStatus === status).length
+              }
+              )
             </h3>
-            <button className="text-var(--text) inline-flex justify-center
-            items-center h-24 w-24 border-none cursor-pointer text-2xl"
-              onClick={() => setShowCreateModal(true)}
-            >
-              +
-            </button>
+            {status === "Todo" && (
+              <button
+                className="text-var(--text) inline-flex justify-center items-center h-8 w-8 border-none cursor-pointer text-2xl m-0"
+                onClick={() => setShowCreateModal(true)}
+              >
+                +
+              </button>
+            )}
           </div>
 
-          {filteredTasks
-            .map((task) => {
-              let computedStatus = task.status;
-              const progress = task.progress || 0;
-
-              if (progress >= 30 && progress < 90) {
-                computedStatus = "In Progress";
-              } else if (progress >= 90 && progress < 100) {
-                computedStatus = "Review";
-              } else if (progress === 100) {
-                computedStatus = "Done";
-              }
-
-              return { ...task, computedStatus };
-            })
+          {tasks
+            .map((task) => ({
+              ...task,
+              computedStatus: getComputedStatus(task),
+            }))
             .filter((task) => task.computedStatus === status)
             .map((task) => (
               <div
                 key={task.id}
                 className="task-card"
+                draggable
+                onDragStart={(e) => handleDragStart(e, task.id)}
                 onClick={() => setSelectedTask(task)}
-                style={{ cursor: "pointer" }}
+                style={{ cursor: "grab" }}
               >
                 <div className="flex items-center gap-20">
                   <button
@@ -78,9 +119,7 @@ export default function BoardView({
                     className="dropdown-wrapper"
                     onClick={(e) => e.stopPropagation()}
                   >
-                    <button
-                      onClick={() => handleThreeDotsClick(task.id)}
-                    >
+                    <button onClick={() => handleThreeDotsClick(task.id)}>
                       <BsThreeDots />
                     </button>
                     {openTaskMenuId === task.id && (
@@ -115,22 +154,22 @@ export default function BoardView({
                     value={task.progress || 0}
                     onChange={(e) => {
                       const newProgress = Number(e.target.value);
+                      let newStatus = getComputedStatus({
+                        ...task,
+                        progress: newProgress,
+                      });
 
-                      let newStatus = task.status;
-                      if (newProgress >= 30 && newProgress < 90) {
-                        newStatus = "In Progress";
-                      } else if (newProgress >= 90 && newProgress < 100) {
-                        newStatus = "Review";
-                      } else if (newProgress === 100) {
-                        newStatus = "Done";
-                      }
-
-                      updateTask({
+                      const updated = {
                         ...task,
                         progress: newProgress,
                         status: newStatus,
                         updatedAt: new Date().toISOString(),
-                      });
+                      };
+
+                      setTasks((prev) =>
+                        prev.map((t) => (t.id === task.id ? updated : t))
+                      );
+                      updateTask(updated);
                     }}
                     className="progress-slider"
                     onClick={(e) => e.stopPropagation()}
@@ -138,7 +177,9 @@ export default function BoardView({
                       background: `linear-gradient(to right, #4caf50 ${task.progress}%, #ddd ${task.progress}%)`,
                     }}
                   />
-                  <span className="progress-percent">{task.progress || 0}%</span>
+                  <span className="progress-percent">
+                    {task.progress || 0}%
+                  </span>
                 </div>
 
                 <div className="subtasks">

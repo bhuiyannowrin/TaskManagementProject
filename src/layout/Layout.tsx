@@ -111,16 +111,18 @@ export default function Layout({ onLogout, user }) {
     setOpenTaskMenuId(null);
   };
 
-  const filteredTasks = tasks
-    .filter((t) => t.title.toLowerCase().includes(searchTerm.toLowerCase()))
-    .filter((t) => {
-      if (selectedFilter === "All Tasks") return true;
-      if (selectedFilter === "My Tasks") return t.owner === "me";
-      if (selectedFilter === "Completed") return t.status === "Done";
-      if (selectedFilter === "In Progress") return t.status === "In Progress";
-      if (selectedFilter === "High Priority") return t.priority === "High";
-      return true;
-    });
+const filteredTasks = tasks
+  .filter((t) => t.title.toLowerCase().includes(searchTerm.toLowerCase()))
+  .filter((t) => {
+    if (selectedFilter === "All Tasks") return true;
+    if (selectedFilter === "My Tasks") return t.owner === "me";
+    if (selectedFilter === "Completed") return t.status === "Done";
+    if (selectedFilter === "In Progress") return t.status === "In Progress";
+    if (selectedFilter === "High Priority") return t.priority === "High";
+    return true;
+
+  });
+
 
   const priorityRank = {
     High: 3,
@@ -186,7 +188,6 @@ useEffect(() => {
 
             <button className="icon-btn">
               <DarkLightSwitch theme={theme} setTheme={setTheme} />
-
             </button>
             <div className="notification-wrapper">
               <button
@@ -223,7 +224,6 @@ useEffect(() => {
                           }}
                         >
                           {msg}
-                          
                         </li>
                       );
                     })}
