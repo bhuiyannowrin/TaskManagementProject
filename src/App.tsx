@@ -17,7 +17,6 @@ function App() {
   }, []);
 
   const handleLogin = (userData) => {
-    // Example userData = { email: 'user@example.com' }
     setIsLoggedIn(true);
     setUser(userData);
     localStorage.setItem('isLoggedIn', 'true');
