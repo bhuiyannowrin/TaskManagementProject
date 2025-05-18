@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { BsThreeDots } from "react-icons/bs";
 import { BiCalendarEvent } from "react-icons/bi";
 import { FiTag } from "react-icons/fi";
-import {threeDotsOptions } from "./Types";
+import { threeDotsOptions } from "./Types";
 
 export default function BoardView({
   filteredTasks,

@@ -120,9 +120,7 @@ const filteredTasks = tasks
     if (selectedFilter === "In Progress") return t.status === "In Progress";
     if (selectedFilter === "High Priority") return t.priority === "High";
     return true;
-
   });
-
 
   const priorityRank = {
     High: 3,
@@ -367,6 +365,7 @@ useEffect(() => {
           <TabsContent value="board">
             <BoardView
               filteredTasks={sortedTasks}
+              updateTask={updateTask}
               handleThreeDotsClick={handleThreeDotsClick}
               handleThreeDotsOptionClick={handleThreeDotsOptionClick}
               openTaskMenuId={openTaskMenuId}
