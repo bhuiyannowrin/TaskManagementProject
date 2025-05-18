@@ -32,7 +32,7 @@ export default function BoardView({
     const progressByStatus = {
       Todo: 0,
       "In Progress": 31,
-      Review: 95,
+      Review: 90,
       Done: 100,
     };
 
