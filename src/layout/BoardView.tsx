@@ -36,6 +36,8 @@ export default function BoardView({
       Done: 100,
     };
 
+
+
     const updatedTask = {
       ...task,
       status: newStatus,
@@ -83,6 +85,7 @@ export default function BoardView({
               }
               )
             </h3>
+
             {status === "Todo" && (
               <button
                 className="text-var(--text) inline-flex justify-center items-center h-8 w-8 border-none cursor-pointer text-2xl m-0"
@@ -134,6 +137,7 @@ export default function BoardView({
                             {opt}
                           </button>
                         ))}
+
                       </div>
                     )}
                   </div>
@@ -180,6 +184,7 @@ export default function BoardView({
                   <span className="progress-percent">
                     {task.progress || 0}%
                   </span>
+
                 </div>
 
                 <div className="subtasks">

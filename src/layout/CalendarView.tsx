@@ -99,7 +99,7 @@ function CalendarView({ tasks }) {
             <FcPrevious />
           </button>
           <h3>
-            {selectedDate.toLocaleString("default", { month: "long" })}{" "}
+            {selectedDate.toLocaleString("default", { month: "long" })}
             {selectedDate.getFullYear()}
           </h3>
           <button
@@ -136,6 +136,7 @@ function CalendarView({ tasks }) {
               activeDate &&
               date &&
               date.toDateString() === activeDate.toDateString();
+
             const isToday =
               date && date.toDateString() === new Date().toDateString();
             const color = getDayColor(date);
@@ -212,6 +213,7 @@ function CalendarView({ tasks }) {
                       <strong>{task.title}</strong>
                     </div>
                     <p>{task.description}</p>
+
                   </React.Fragment>
                 ))}
               </ul>

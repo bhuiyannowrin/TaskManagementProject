@@ -5,7 +5,7 @@ import { BsGripVertical } from "react-icons/bs";
 import "./AddTask.css";
 
 export default function EditTask({ closeModal, task, updateTask }) {
-  const [title, setTitle] = useState(task.title || "");
+  const [title, setTitle] = useState(task.title || "")
   const [description, setDescription] = useState(task.description || "");
   const [priority, setPriority] = useState(task.priority || "Low");
   const [dueDate, setDueDate] = useState(task.dueDate || "");
@@ -109,7 +109,7 @@ export default function EditTask({ closeModal, task, updateTask }) {
                   name="priority"
                   checked={priority === p}
                   onChange={() => setPriority(p)}
-                />{" "}
+                />
                 {p}
               </label>
             ))}
@@ -157,14 +157,7 @@ export default function EditTask({ closeModal, task, updateTask }) {
                   ref={provided.innerRef}
                 >
                   {subtasks.length === 0 ? (
-                    <p
-                      style={{
-                        textAlign: "left",
-                        fontSize: "12px",
-                        marginTop: "10px",
-                        color: "#666",
-                      }}
-                    >
+                    <p className="text-left text-xs mt-2 text-[#666]">
                       No subtasks yet. Add one to break down this task.
                     </p>
                   ) : (

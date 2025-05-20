@@ -5,7 +5,7 @@ import DarkLightSwitch from "./DarkLightSwitch";
 import { BiBell } from "react-icons/bi";
 import { FiSettings } from "react-icons/fi";
 import { FaChevronDown, FaUserCircle } from "react-icons/fa";
-import { LayoutGrid, List, Calendar, Users, Search } from "lucide-react";
+import { LayoutGrid, List, Calendar, Users, Search} from "lucide-react";
 import AddTask from "../CRUDfeature/AddTask";
 import { taskFilter, taskSort } from "./Types";
 import BoardView from "./BoardView";

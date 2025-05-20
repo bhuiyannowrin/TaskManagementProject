@@ -1,98 +1,85 @@
-import React, { useState } from "react";
+
+import React, { useEffect, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BiCalendarEvent } from "react-icons/bi";
 
-const teamMembers = [
+const defaultTeamMembers = [
   {
     id: "user1",
     name: "Alex Johnson",
-    avatar:
-      "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif",
+    avatar: "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif",
     tasks: [
-      {
-        title: "Research competitors",
-        status: "Todo",
-        dueDate: "2023-06-15",
-        priority: "M",
-      },
-      {
-        title: "QA testing for v1.0",
-        status: "Review",
-        dueDate: "2023-06-07",
-        priority: "H",
-      },
+      { title: "Research competitors", status: "Todo", dueDate: "2023-06-15", priority: "M" },
+      { title: "QA testing for v1.0", status: "Review", dueDate: "2023-06-07", priority: "H" },
     ],
   },
   {
     id: "user2",
     name: "Sam Taylor",
-    avatar:
-      "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif",
+    avatar: "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif",
     tasks: [
-
-      {
-        title: "Research competitors",
-        status: "Todo",
-        dueDate: "2023-06-15",
-        priority: "L",
-      },
-
-      {
-        title: "QA testing for v1.0",
-        status: "In Progress",
-        dueDate: "2023-06-07",
-        priority: "H",
-      },
+      { title: "Research competitors", status: "Todo", dueDate: "2023-06-15", priority: "L" },
+      { title: "QA testing for v1.0", status: "In Progress", dueDate: "2023-06-07", priority: "H" },
     ],
   },
   {
     id: "user3",
     name: "Jamie Smith",
-    avatar:
-      "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif",
+    avatar: "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif",
     tasks: [
-      {
-        title: "Research competitors",
-        status: "Todo",
-        dueDate: "2025-06-15",
-        priority: "M",
-      },
-      {
-        title: "QA testing for v1.0",
-        status: "Review",
-        dueDate: "2025-06-07",
-        priority: "H",
-      },
+      { title: "Research competitors", status: "Todo", dueDate: "2025-06-15", priority: "M" },
+      { title: "QA testing for v1.0", status: "Review", dueDate: "2025-06-07", priority: "H" },
     ],
   },
   {
     id: "user4",
     name: "Smith",
-    avatar:
-    "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif",
-    tasks:[
-      {
-        title: "Task 1",
-        status: "In Progress",
-        dueDate: "2025-06-15",
-        priority: "L",
-      }
-    ]
-  }
+    avatar: "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif",
+    tasks: [
+      { title: "Task 1", status: "In Progress", dueDate: "2025-06-15", priority: "L" },
+    ],
+  },
 ];
 
 const TeamView = () => {
+  const [members, setMembers] = useState(defaultTeamMembers);
+  const [tabs, setTabs] = useState({}); 
+
+  useEffect(() => {
+    const stored = localStorage.getItem("logindata");
+    if (stored) {
+      const user = JSON.parse(stored);
+      const newUser = {
+        id: "loggedin",
+        name: user.email.split("@")[0], 
+        avatar: "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif",
+        tasks: [
+          { title: "Welcome Task", status: "Todo", dueDate: "2025-06-01", priority: "L" },
+        ],
+      };
+
+      setMembers((prev) => {
+        const exists = prev.some((m) => m.id === "loggedin");
+        return exists ? prev : [newUser, ...prev];
+      });
+    }
+  }, []);
+
   const getCompletion = (tasks) => {
     const total = tasks.length;
     const done = tasks.filter((t) => t.status === "Done").length;
     return total === 0 ? 0 : Math.round((done / total) * 100);
   };
 
+  const handleTabChange = (id, value) => {
+    setTabs((prev) => ({ ...prev, [id]: value }));
+  };
+
   return (
     <div className="p-4 grid grid-cols-1 md:grid-cols-2 gap-6">
-      {teamMembers.map((member) => {
+      {members.map((member) => {
         const completion = getCompletion(member.tasks);
-        const [tab, setTab] = useState("all");
+        const tab = tabs[member.id] || "all";
 
         return (
           <div
@@ -107,9 +94,7 @@ const TeamView = () => {
               />
               <div>
                 <h2 className="text-lg font-semibold">{member.name}</h2>
-                <p className="text-gray-400 text-sm">
-                  {member.tasks.length} tasks
-                </p>
+                <p className="text-gray-400 text-sm">{member.tasks.length} tasks</p>
               </div>
             </div>
 
@@ -126,16 +111,16 @@ const TeamView = () => {
               </div>
             </div>
 
-            <Tabs value={tab} onValueChange={setTab} className="mt-4">
+            <Tabs value={tab} onValueChange={(val) => handleTabChange(member.id, val)} className="mt-4">
               <TabsList className="flex justify-between bg-gray-800 rounded-md p-1 mb-2">
                 {["all", "todo", "inprogress", "done"].map((val) => (
                   <TabsTrigger
                     key={val}
                     value={val}
                     className="px-3 py-1 rounded-md
-                     data-[state=active]:bg-gray-900
-                     data-[state=active]:font-bold
-                     data-[state=active]:text-white"
+                      data-[state=active]:bg-gray-900
+                      data-[state=active]:font-bold
+                      data-[state=active]:text-white"
                   >
                     {val === "all"
                       ? "All"
@@ -153,17 +138,13 @@ const TeamView = () => {
                   val === "all"
                     ? member.tasks
                     : member.tasks.filter(
-                        (task) =>
-                          task.status.toLowerCase() === val.toLowerCase()
+                        (task) => task.status.toLowerCase() === val.toLowerCase()
                       );
 
                 return (
                   <TabsContent key={val} value={val}>
-                    {filteredTasks.length === 0 &&
-                    (val === "inprogress" || val === "done") ? (
-                      <p className="text-sm text-gray-500">
-                        No tasks available
-                      </p>
+                    {filteredTasks.length === 0 ? (
+                      <p className="text-sm text-gray-500">No tasks available</p>
                     ) : (
                       filteredTasks.map((task, index) => (
                         <div
@@ -176,12 +157,10 @@ const TeamView = () => {
                               className={`text-white text-xs px-2 py-1 rounded-full
                                 ${
                                   task.priority === "H"
-                                    ? "bg-red-700 text-white"
+                                    ? "bg-red-700"
                                     : task.priority === "M"
-                                    ? "bg-blue-500 text-white"
-                                    : task.priority === "L"
-                                    ? "bg-green-700 text-purple-300"
-                                    : "bg-black-700 text-white"
+                                    ? "bg-blue-500"
+                                    : "bg-green-700 text-purple-300"
                                 }`}
                             >
                               {task.priority}
@@ -202,7 +181,6 @@ const TeamView = () => {
                             >
                               {task.status}
                             </span>
-
                             <div className="flex items-center gap-1">
                               <BiCalendarEvent />
                               <span>{task.dueDate}</span>
