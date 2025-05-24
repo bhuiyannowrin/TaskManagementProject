@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 
 import {
-  BiCalendarEvent, 
-  BiEdit, 
-  BiFile, 
-  BiMessage, 
-  BiCommentDetail, 
-  BiPaperclip, 
+  BiCalendarEvent,
+  BiEdit,
+  BiFile,
+  BiMessage,
+  BiCommentDetail,
+  BiPaperclip,
   BiUser,
 } from "react-icons/bi";
 
@@ -23,10 +23,11 @@ function timeAgo(date) {
     { label: "hour", seconds: 3600 },
     { label: "minute", seconds: 60 },
   ];
-  for (let i = 0; i < intervals.length; i++) {
-    const interval = Math.floor(seconds / intervals[i].seconds);
-    if (interval >= 1)
-      return `${interval} ${intervals[i].label}${interval > 1 ? "s" : ""} ago`;
+  for (let interval of intervals) {
+    const count = Math.floor(seconds / interval.seconds);
+    if (count >= 1) {
+      return `${count} ${interval.label}${count > 1 ? "s" : ""} ago`;
+    }
   }
   return "Just now";
 }
@@ -36,6 +37,10 @@ export default function TaskDetailModal({ task, onClose, setEditTaskId }) {
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [newComment, setNewComment] = useState("");
   const [comments, setComments] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [loggedInEmail, setLoggedInEmail] = useState("");
+
+  const loginName = loggedInEmail ? loggedInEmail.split("@")[0] : "You";
 
   useEffect(() => {
     if (task) {
@@ -43,6 +48,25 @@ export default function TaskDetailModal({ task, onClose, setEditTaskId }) {
       const savedFiles = localStorage.getItem(`files-${task.id}`);
       if (savedComments) setComments(JSON.parse(savedComments));
       if (savedFiles) setUploadedFiles(JSON.parse(savedFiles));
+    }
+
+    const stored = localStorage.getItem("logindata");
+    if (stored) {
+      const loggedInUser = JSON.parse(stored);
+      const email = loggedInUser.email;
+      setLoggedInEmail(email);
+
+      const newUser = {
+        id: email,
+        name: email.split("@")[0],
+      };
+
+      setUsers((prev) => {
+        const exists = prev.some((m) => m.id === email);
+        return exists
+          ? prev.map((m) => (m.id === email ? newUser : m))
+          : [newUser, ...prev];
+      });
     }
   }, [task]);
 
@@ -63,7 +87,7 @@ export default function TaskDetailModal({ task, onClose, setEditTaskId }) {
               size: file.size,
               data: e.target.result,
             },
-            author: "You",
+            author: loginName,
             date: new Date().toISOString(),
           });
         };
@@ -81,7 +105,7 @@ export default function TaskDetailModal({ task, onClose, setEditTaskId }) {
   const handleAddComment = () => {
     if (newComment.trim()) {
       const newEntry = {
-        author: "You",
+        author: loginName,
         text: newComment,
         date: new Date().toISOString(),
       };
@@ -107,9 +131,7 @@ export default function TaskDetailModal({ task, onClose, setEditTaskId }) {
   return (
     <div className="modal-overlay">
       <div className="modal-content">
-        <button className="close-btn" onClick={onClose}>
-          ×
-        </button>
+        <button className="close-btn" onClick={onClose}>×</button>
         <button className="edit-btn" onClick={handleEditClick}>
           <BiEdit />
         </button>
@@ -120,51 +142,26 @@ export default function TaskDetailModal({ task, onClose, setEditTaskId }) {
 
         <h2 className="task-title">{task.title}</h2>
 
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="mt-4">
+        <Tabs value={activeTab} onValueChange={setActiveTab}>
           <TabsList className="flex gap-2 w-full justify-start">
             <TabsTrigger value="details">Details</TabsTrigger>
             <TabsTrigger value="comments">
-              Comments
-              {comments.length > 0 && (
-                <span className="ml-1 rounded-full bg-muted px-2 py-0.5 text-xs font-medium">
-                  {comments.length}
-                </span>
-              )}
+              Comments {comments.length > 0 && <span className="tab-badge">{comments.length}</span>}
             </TabsTrigger>
-
             <TabsTrigger value="files">
-              Files
-              {uploadedFiles.length > 0 && (
-                <span className="ml-1 rounded-full bg-muted px-2 py-0.5 text-xs font-medium">
-                  {uploadedFiles.length}
-                </span>
-              )}
+              Files {uploadedFiles.length > 0 && <span className="tab-badge">{uploadedFiles.length}</span>}
             </TabsTrigger>
-
             <TabsTrigger value="activity">
-              Activity
-              {combinedActivities.length > 0 && (
-                <span className="ml-1 rounded-full bg-muted px-2 py-0.5 text-xs font-medium">
-                  {combinedActivities.length}
-                </span>
-              )}
+              Activity {combinedActivities.length > 0 && <span className="tab-badge">{combinedActivities.length}</span>}
             </TabsTrigger>
           </TabsList>
 
           <TabsContent value="details">
             <div className="meta-info">
-              <span>
-                <BiCalendarEvent /> Due: {task.dueDate}
-              </span>
-              <span>
-                <BiUser /> XYZ
-              </span>
-              <span>
-                <BiMessage /> ({comments.length}) comments
-              </span>
-              <span>
-                <BiFile /> {uploadedFiles.length} files
-              </span>
+              <span><BiCalendarEvent /> Due: {task.dueDate}</span>
+              <span><BiUser /> {loginName}</span>
+              <span><BiMessage /> ({comments.length}) comments</span>
+              <span><BiFile /> {uploadedFiles.length} files</span>
             </div>
 
             <div className="description">
@@ -173,7 +170,7 @@ export default function TaskDetailModal({ task, onClose, setEditTaskId }) {
             </div>
 
             <div className="progress-section">
-              <strong> Progress </strong>
+              <strong>Progress</strong>
               <input
                 type="range"
                 min="0"
@@ -188,10 +185,9 @@ export default function TaskDetailModal({ task, onClose, setEditTaskId }) {
               <span className="progress-percent">{task.progress || 0}%</span>
             </div>
 
-            <div className="flex items-center text-xs px-2 py-1 rounded-md gap-2">
-              {task.subtasks.map((subtask, index) => (
-                <div key={index} className="tag"
-                >
+            <div className="subtask-tags">
+              {task.subtasks?.map((subtask, index) => (
+                <div key={index} className="tag">
                   {subtask.title}
                 </div>
               ))}
@@ -200,14 +196,12 @@ export default function TaskDetailModal({ task, onClose, setEditTaskId }) {
 
           <TabsContent value="comments">
             <div className="comment-input-section">
-
               <textarea
                 placeholder="Add a comment... (use @ to mention someone)"
                 value={newComment}
                 onChange={(e) => setNewComment(e.target.value)}
                 className="comment-textarea"
               />
-
               <button className="add-comment-btn" onClick={handleAddComment}>
                 Add Comment
               </button>
@@ -223,31 +217,27 @@ export default function TaskDetailModal({ task, onClose, setEditTaskId }) {
 
           <TabsContent value="files">
             <div
-              className="tab-content"
+              className="tab-content file-drop-zone"
               onDragOver={(e) => e.preventDefault()}
               onDrop={(e) => {
                 e.preventDefault();
                 handleFileUpload(e.dataTransfer.files);
               }}
             >
-              <div className="upload-section file-drop-zone">
-                <label htmlFor="file-upload" className="upload-label">
-                  Upload file or drag and drop here
-                </label>
-                <input
-                  id="file-upload"
-                  type="file"
-                  style={{ display: "none" }}
-                  multiple
-                  onChange={(e) => handleFileUpload(e.target.files)}
-                />
-              </div>
+              <label htmlFor="file-upload" className="upload-label">
+                Upload file or drag and drop here
+              </label>
+              <input
+                id="file-upload"
+                type="file"
+                multiple
+                style={{ display: "none" }}
+                onChange={(e) => handleFileUpload(e.target.files)}
+              />
 
               {uploadedFiles.length > 0 && (
                 <>
-                  <h5 className="attachment-heading">
-                    Attachments ({uploadedFiles.length})
-                  </h5>
+                  <h5 className="attachment-heading">Attachments ({uploadedFiles.length})</h5>
                   {uploadedFiles.map((entry, index) => (
                     <div className="file-item" key={index}>
                       <span className="file-name">{entry.file.name}</span>
@@ -280,11 +270,7 @@ export default function TaskDetailModal({ task, onClose, setEditTaskId }) {
                   {combinedActivities.map((item, idx) => (
                     <li key={idx} className="activity-item">
                       <div className="activity-icon">
-                        {item.type === "comment" ? (
-                          <BiCommentDetail />
-                        ) : (
-                          <BiPaperclip />
-                        )}
+                        {item.type === "comment" ? <BiCommentDetail /> : <BiPaperclip />}
                       </div>
                       <div className="activity-details">
                         <div className="avatar-name-row">
@@ -293,12 +279,10 @@ export default function TaskDetailModal({ task, onClose, setEditTaskId }) {
                           </div>
                           <span className="author-name">{item.author}</span>
                         </div>
-                        <div className="activity-time">
-                          {timeAgo(item.date)}
-                        </div>
+                        <div className="activity-time">{timeAgo(item.date)}</div>
                         <div className="activity-text">
                           {item.type === "comment"
-                            ? "Commented: " + item.text
+                            ? `Commented: ${item.text}`
                             : `Attached file: ${item.file.name}`}
                         </div>
                       </div>

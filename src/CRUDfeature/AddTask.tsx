@@ -80,7 +80,10 @@ export default function AddTask({ closeModal, addTask }: SubtaskItemProps) {
     const hasError = Object.values(errors).some((msg) => msg !== "");
     if (hasError) return;
 
-    addTask({
+    const stored = localStorage.getItem("logindata");
+    const loggedInEmail = stored ? JSON.parse(stored).email : "";
+
+    const taskToAdd = {
       id: Date.now().toString(),
       title,
       description,
@@ -88,11 +91,16 @@ export default function AddTask({ closeModal, addTask }: SubtaskItemProps) {
       dueDate,
       status: "Todo",
       subtasks,
-    });
+      owner: loggedInEmail,
+    };
+
+    addTask(taskToAdd);
+
+    const existingTasks = JSON.parse(localStorage.getItem("loggedUserTasks")) || [];
+    localStorage.setItem("loggedUserTasks", JSON.stringify([...existingTasks, taskToAdd]));
 
     closeModal();
   };
-
   return (
     <div className="modal-overlay">
       <div className="modal-container">
@@ -111,7 +119,9 @@ export default function AddTask({ closeModal, addTask }: SubtaskItemProps) {
             onChange={(e) => setTitle(e.target.value)}
             className="p-2 border border-[#555] rounded-[6px] bg-var(--bg) text-var(--text)"
           />
-          {formErrors.title && <p className="text-red-600 mt-1 text-left">{formErrors.title}</p>}
+          {formErrors.title && (
+            <p className="text-red-600 mt-1 text-left">{formErrors.title}</p>
+          )}
         </div>
 
         <div className="form-group">
@@ -124,14 +134,14 @@ export default function AddTask({ closeModal, addTask }: SubtaskItemProps) {
             className="p-2 border border-[#555] rounded-[6px] bg-var(--bg) text-var(--text)"
           />
           {formErrors.description && (
-            <p className="text-red-600 mt-1 text-left">{formErrors.description}</p>
+            <p className="text-red-600 mt-1 text-left">
+              {formErrors.description}
+            </p>
           )}
         </div>
 
         <div className="form-group">
-          <label>
-            Priority
-          </label>
+          <label>Priority</label>
           <div className="priority-options">
             {["Low", "Medium", "High"].map((p) => (
               <label key={p}>
@@ -151,7 +161,7 @@ export default function AddTask({ closeModal, addTask }: SubtaskItemProps) {
           <label>
             Due Date <span className="text-red-600">*</span>
           </label>
-          
+
           <input
             type="date"
             value={dueDate}

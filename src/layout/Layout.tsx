@@ -5,7 +5,7 @@ import DarkLightSwitch from "./DarkLightSwitch";
 import { BiBell } from "react-icons/bi";
 import { FiSettings } from "react-icons/fi";
 import { FaChevronDown, FaUserCircle } from "react-icons/fa";
-import { LayoutGrid, List, Calendar, Users, Search} from "lucide-react";
+import { LayoutGrid, List, Calendar, Users, Search } from "lucide-react";
 import AddTask from "../CRUDfeature/AddTask";
 import { taskFilter, taskSort } from "./Types";
 import BoardView from "./BoardView";
@@ -53,6 +53,31 @@ export default function Layout({ onLogout, user }) {
   const [openTaskMenuId, setOpenTaskMenuId] = useState(null);
   const [selectedTask, setSelectedTask] = useState(null);
   const [editTaskId, setEditTaskId] = useState(null);
+
+  const [users, setUsers] = useState([]);
+  const [loggedInEmail, setLoggedInEmail] = useState("");
+
+  useEffect(() => {
+    const stored = localStorage.getItem("logindata");
+    if (stored) {
+      const loggedInUser = JSON.parse(stored);
+      const email = loggedInUser.email;
+
+      setLoggedInEmail(email);
+
+      const newUser = {
+        id: email,
+        name: email.split("@")[0],
+      };
+
+      setUsers((prev) => {
+        const exists = prev.some((m) => m.id === email);
+        return exists
+          ? prev.map((m) => (m.id === email ? newUser : m))
+          : [newUser, ...prev];
+      });
+    }
+  }, [tasks]);
 
   useEffect(() => {
     localStorage.setItem("tasks", JSON.stringify(tasks));
@@ -111,16 +136,16 @@ export default function Layout({ onLogout, user }) {
     setOpenTaskMenuId(null);
   };
 
-const filteredTasks = tasks
-  .filter((t) => t.title.toLowerCase().includes(searchTerm.toLowerCase()))
-  .filter((t) => {
-    if (selectedFilter === "All Tasks") return true;
-    if (selectedFilter === "My Tasks") return t.owner === "me";
-    if (selectedFilter === "Completed") return t.status === "Done";
-    if (selectedFilter === "In Progress") return t.status === "In Progress";
-    if (selectedFilter === "High Priority") return t.priority === "High";
-    return true;
-  });
+  const filteredTasks = tasks
+    .filter((t) => t.title.toLowerCase().includes(searchTerm.toLowerCase()))
+    .filter((t) => {
+      if (selectedFilter === "All Tasks") return true;
+      if (selectedFilter === "My Tasks") return t.owner === "me";
+      if (selectedFilter === "Completed") return t.status === "Done";
+      if (selectedFilter === "In Progress") return t.status === "In Progress";
+      if (selectedFilter === "High Priority") return t.priority === "High";
+      return true;
+    });
 
   const priorityRank = {
     High: 3,
@@ -156,16 +181,16 @@ const filteredTasks = tasks
 
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
 
-useEffect(() => {
-  if (theme === "dark") {
-    document.documentElement.classList.add("dark");
-    document.documentElement.classList.remove("light");
-  } else {
-    document.documentElement.classList.add("light");
-    document.documentElement.classList.remove("dark");
-  }
-  localStorage.setItem("theme", theme);
-}, [theme]);
+  useEffect(() => {
+    if (theme === "dark") {
+      document.documentElement.classList.add("dark");
+      document.documentElement.classList.remove("light");
+    } else {
+      document.documentElement.classList.add("light");
+      document.documentElement.classList.remove("dark");
+    }
+    localStorage.setItem("theme", theme);
+  }, [theme]);
 
   return (
     <div className="app-container">
@@ -241,14 +266,14 @@ useEffect(() => {
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button className="border-2 rounded-2xl"> 
+                <Button className="border-2 rounded-2xl">
                   <FaUserCircle size={40} className="text-var(--text)" />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-56">
                 <DropdownMenuLabel> Account </DropdownMenuLabel>
                 <DropdownMenuItem>
-                  <FaUserCircle size={30} className="text-var(--text)" />                  
+                  <FaUserCircle size={30} className="text-var(--text)" />
                   <p>{user.email}</p>
                 </DropdownMenuItem>
                 <DropdownMenuGroup>
@@ -258,7 +283,10 @@ useEffect(() => {
                 <DropdownMenuSeparator />
                 <DropdownMenuLabel> Task Master </DropdownMenuLabel>
                 <DropdownMenuGroup>
-                  <DropdownMenuItem disabled> Profile and visibility </DropdownMenuItem>
+                  <DropdownMenuItem disabled>
+                    {" "}
+                    Profile and visibility{" "}
+                  </DropdownMenuItem>
                   <DropdownMenuItem disabled> Activity </DropdownMenuItem>
                   <DropdownMenuItem disabled> Cards </DropdownMenuItem>
                   <DropdownMenuItem disabled> Settings </DropdownMenuItem>
@@ -266,13 +294,17 @@ useEffect(() => {
                 <DropdownMenuSeparator />
                 <DropdownMenuGroup>
                   <DropdownMenuSub>
-                    <DropdownMenuSubTrigger>
-                      Theme
-                    </DropdownMenuSubTrigger>
+                    <DropdownMenuSubTrigger>Theme</DropdownMenuSubTrigger>
                     <DropdownMenuPortal>
                       <DropdownMenuSubContent>
-                        <DropdownMenuItem onClick={()=> setTheme("light")}> Light</DropdownMenuItem>
-                        <DropdownMenuItem onClick={()=> setTheme("dark")}> Dark</DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => setTheme("light")}>
+                          {" "}
+                          Light
+                        </DropdownMenuItem>
+                        <DropdownMenuItem onClick={() => setTheme("dark")}>
+                          {" "}
+                          Dark
+                        </DropdownMenuItem>
                       </DropdownMenuSubContent>
                     </DropdownMenuPortal>
                   </DropdownMenuSub>
@@ -285,9 +317,7 @@ useEffect(() => {
                 <DropdownMenuItem disabled> Help</DropdownMenuItem>
                 <DropdownMenuItem disabled> Shortcut</DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={onLogout}>
-                  Logout
-                </DropdownMenuItem>
+                <DropdownMenuItem onClick={onLogout}>Logout</DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
@@ -368,6 +398,7 @@ useEffect(() => {
               openTaskMenuId={openTaskMenuId}
               setShowCreateModal={setShowCreateModal}
               setSelectedTask={setSelectedTask}
+              loginName={user.email.split("@")[0]}
             />
           </TabsContent>
 
@@ -378,6 +409,7 @@ useEffect(() => {
               handleThreeDotsOptionClick={handleThreeDotsOptionClick}
               openTaskMenuId={openTaskMenuId}
               setSelectedTask={setSelectedTask}
+              loginName={user.email.split("@")[0]}
             />
           </TabsContent>
 

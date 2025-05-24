@@ -7,8 +7,11 @@ export default function ListView({
   handleThreeDotsOptionClick, 
   openTaskMenuId,
   setSelectedTask,
-  updateTask
+  updateTask,
+  loginName,
+
 }) {
+
   return (
     <div className="list-view">
       <table className="task-table">
@@ -60,7 +63,12 @@ export default function ListView({
                 </td>
 
                 <td><small>{task.dueDate}</small></td>
-                <td><small>{task.assignee}</small></td>
+
+                <td>
+                  <small>
+                    {loginName}
+                  </small>
+                </td>
 
                 <td style={{ textAlign: "center" }}>
                   <small>{task.progress || 0} %</small>
@@ -71,9 +79,7 @@ export default function ListView({
                     className="dropdown-wrapper"
                     onClick={(e) => e.stopPropagation()}
                   >
-                    <button
-                      onClick={() => handleThreeDotsClick(task.id)}
-                    >
+                    <button onClick={() => handleThreeDotsClick(task.id)}>
                       <BsThreeDotsVertical />
                     </button>
                     {openTaskMenuId === task.id && (
@@ -81,7 +87,9 @@ export default function ListView({
                         {threeDotsOptions2.map((opt) => (
                           <button
                             key={opt}
-                            onClick={() => handleThreeDotsOptionClick(opt, task.id)}
+                            onClick={() =>
+                              handleThreeDotsOptionClick(opt, task.id)
+                            }
                           >
                             {opt}
                           </button>

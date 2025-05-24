@@ -42,27 +42,37 @@ const defaultTeamMembers = [
 
 const TeamView = () => {
   const [members, setMembers] = useState(defaultTeamMembers);
-  const [tabs, setTabs] = useState({}); 
+  const [tabs, setTabs] = useState({});
 
   useEffect(() => {
-    const stored = localStorage.getItem("logindata");
-    if (stored) {
-      const user = JSON.parse(stored);
-      const newUser = {
-        id: "loggedin",
-        name: user.email.split("@")[0], 
-        avatar: "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif",
-        tasks: [
-          { title: "Welcome Task", status: "Todo", dueDate: "2025-06-01", priority: "L" },
-        ],
-      };
+  const stored = localStorage.getItem("logindata");
+  const userTasks = JSON.parse(localStorage.getItem("loggedUserTasks")) || [];
 
-      setMembers((prev) => {
-        const exists = prev.some((m) => m.id === "loggedin");
-        return exists ? prev : [newUser, ...prev];
-      });
-    }
-  }, []);
+  if (stored) {
+    const user = JSON.parse(stored);
+    const newUser = {
+      id: "loggedin",
+      name: user.email.split("@")[0],
+      avatar: "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif",
+      tasks: userTasks.length
+        ? userTasks
+        : [
+            {
+              title: "Welcome Task",
+              status: "Todo",
+              dueDate: "2025-06-01",
+              priority: "L",
+            },
+          ],
+    };
+
+    setMembers((prev) => {
+      const exists = prev.some((m) => m.id === "loggedin");
+      return exists ? prev.map(m => m.id === "loggedin" ? newUser : m) : [newUser, ...prev];
+    });
+  }
+}, []);
+
 
   const getCompletion = (tasks) => {
     const total = tasks.length;
@@ -156,9 +166,9 @@ const TeamView = () => {
                             <span
                               className={`text-white text-xs px-2 py-1 rounded-full
                                 ${
-                                  task.priority === "H"
+                                  task.priority === "High"
                                     ? "bg-red-700"
-                                    : task.priority === "M"
+                                    : task.priority === "Medium"
                                     ? "bg-blue-500"
                                     : "bg-green-700 text-purple-300"
                                 }`}

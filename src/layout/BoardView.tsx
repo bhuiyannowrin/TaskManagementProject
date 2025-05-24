@@ -12,6 +12,7 @@ export default function BoardView({
   setShowCreateModal,
   setSelectedTask,
   updateTask,
+  loginName,
 }) {
   const [tasks, setTasks] = useState([]);
 
@@ -137,7 +138,6 @@ export default function BoardView({
                             {opt}
                           </button>
                         ))}
-
                       </div>
                     )}
                   </div>
@@ -147,6 +147,10 @@ export default function BoardView({
                 <p>{task.description}</p>
                 <small className="flex items-center gap-1">
                   <BiCalendarEvent /> {task.dueDate}
+                </small>
+                <small style={{ fontStyle: "italic", color: "#555" }}>
+                  Created by:
+                  {loginName}
                 </small>
 
                 <div className="progress-section">
@@ -184,7 +188,6 @@ export default function BoardView({
                   <span className="progress-percent">
                     {task.progress || 0}%
                   </span>
-
                 </div>
 
                 <div className="subtasks">
@@ -194,7 +197,6 @@ export default function BoardView({
                     </div>
                   ))}
                 </div>
-
               </div>
             ))}
         </div>
