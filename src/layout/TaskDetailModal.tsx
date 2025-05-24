@@ -1,17 +1,17 @@
 import { useEffect, useState } from "react";
+
 import {
-  BiCalendarEvent,
-  BiEdit,
-  BiFile,
-  BiMessage,
-  BiCommentDetail,
-  BiPaperclip,
+  BiCalendarEvent, 
+  BiEdit, 
+  BiFile, 
+  BiMessage, 
+  BiCommentDetail, 
+  BiPaperclip, 
   BiUser,
 } from "react-icons/bi";
+
 import { FiDownload as Download } from "react-icons/fi";
-
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-
 import "./TaskDetailModal.css";
 
 function timeAgo(date) {
@@ -173,7 +173,7 @@ export default function TaskDetailModal({ task, onClose, setEditTaskId }) {
             </div>
 
             <div className="progress-section">
-              <strong>Progress</strong>
+              <strong> Progress </strong>
               <input
                 type="range"
                 min="0"
@@ -200,12 +200,14 @@ export default function TaskDetailModal({ task, onClose, setEditTaskId }) {
 
           <TabsContent value="comments">
             <div className="comment-input-section">
+
               <textarea
                 placeholder="Add a comment... (use @ to mention someone)"
                 value={newComment}
                 onChange={(e) => setNewComment(e.target.value)}
                 className="comment-textarea"
               />
+
               <button className="add-comment-btn" onClick={handleAddComment}>
                 Add Comment
               </button>

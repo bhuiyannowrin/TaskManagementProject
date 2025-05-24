@@ -36,8 +36,6 @@ export default function BoardView({
       Done: 100,
     };
 
-
-
     const updatedTask = {
       ...task,
       status: newStatus,
@@ -88,7 +86,8 @@ export default function BoardView({
 
             {status === "Todo" && (
               <button
-                className="text-var(--text) inline-flex justify-center items-center h-8 w-8 border-none cursor-pointer text-2xl m-0"
+                className="text-var(--text) inline-flex justify-center 
+                items-center h-8 w-8 border-none cursor-pointer text-2xl m-0"
                 onClick={() => setShowCreateModal(true)}
               >
                 +
@@ -125,6 +124,7 @@ export default function BoardView({
                     <button onClick={() => handleThreeDotsClick(task.id)}>
                       <BsThreeDots />
                     </button>
+
                     {openTaskMenuId === task.id && (
                       <div className="dropdown-menu">
                         {threeDotsOptions.map((opt) => (
@@ -194,6 +194,7 @@ export default function BoardView({
                     </div>
                   ))}
                 </div>
+
               </div>
             ))}
         </div>

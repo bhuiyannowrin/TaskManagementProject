@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BiCalendarEvent } from "react-icons/bi";
@@ -92,6 +91,7 @@ const TeamView = () => {
                 alt={member.name}
                 className="w-14 h-14 rounded-full border"
               />
+
               <div>
                 <h2 className="text-lg font-semibold">{member.name}</h2>
                 <p className="text-gray-400 text-sm">{member.tasks.length} tasks</p>

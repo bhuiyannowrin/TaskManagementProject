@@ -60,7 +60,7 @@ export default function AddTask({ closeModal, addTask }: SubtaskItemProps) {
     setSubtasks(updated);
   };
 
-  const handleDragEnd = (result: any) => {
+  const handleDragEnd = (result) => {
     if (!result.destination) return;
     const reordered = Array.from(subtasks);
     const [moved] = reordered.splice(result.source.index, 1);
@@ -151,6 +151,7 @@ export default function AddTask({ closeModal, addTask }: SubtaskItemProps) {
           <label>
             Due Date <span className="text-red-600">*</span>
           </label>
+          
           <input
             type="date"
             value={dueDate}

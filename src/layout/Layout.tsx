@@ -232,9 +232,6 @@ useEffect(() => {
             <button className="icon-btn">
               <FiSettings />
             </button>
-            <button>
-              
-            </button>
             <button
               className="new-task-btn"
               onClick={() => setShowCreateModal(true)}

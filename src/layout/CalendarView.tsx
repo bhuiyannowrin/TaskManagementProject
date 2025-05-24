@@ -33,6 +33,7 @@ function CalendarView({ tasks }) {
 
   const getISODate = (date) => date.toLocaleDateString("en-CA");
 
+
   const formatDisplayDate = (date) =>
     date.toLocaleDateString("en-US", {
       year: "numeric",
