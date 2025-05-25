@@ -159,7 +159,7 @@ export default function TaskDetailModal({ task, onClose, setEditTaskId }) {
           <TabsContent value="details">
             <div className="meta-info">
               <span><BiCalendarEvent /> Due: {task.dueDate}</span>
-              <span><BiUser /> {loginName}</span>
+              <span><BiUser /> Creator: {task.creator || loginName}</span>
               <span><BiMessage /> ({comments.length}) comments</span>
               <span><BiFile /> {uploadedFiles.length} files</span>
             </div>

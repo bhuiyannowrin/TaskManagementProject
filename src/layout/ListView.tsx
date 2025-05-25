@@ -1,17 +1,15 @@
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { threeDotsOptions2, priorityColors } from "./Types";
 
-export default function ListView({ 
+export default function ListView({
   filteredTasks,
-  handleThreeDotsClick, 
-  handleThreeDotsOptionClick, 
+  handleThreeDotsClick,
+  handleThreeDotsOptionClick,
   openTaskMenuId,
   setSelectedTask,
   updateTask,
   loginName,
-
 }) {
-
   return (
     <div className="list-view">
       <table className="task-table">
@@ -21,12 +19,12 @@ export default function ListView({
             <th>Priority</th>
             <th>Status</th>
             <th>Due Date</th>
-            <th>Assignee</th>
+            <th>Created By </th>
             <th>Progress</th>
             <th></th>
           </tr>
         </thead>
-        
+
         <tbody>
           {filteredTasks.map((task) => {
             let displayStatus = "To Do";
@@ -62,12 +60,12 @@ export default function ListView({
                   <small>{displayStatus}</small>
                 </td>
 
-                <td><small>{task.dueDate}</small></td>
+                <td>
+                  <small>{task.dueDate}</small>
+                </td>
 
                 <td>
-                  <small>
-                    {loginName}
-                  </small>
+                  <small>{task.creator || loginName}</small>
                 </td>
 
                 <td style={{ textAlign: "center" }}>

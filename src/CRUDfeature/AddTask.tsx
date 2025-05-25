@@ -82,6 +82,7 @@ export default function AddTask({ closeModal, addTask }: SubtaskItemProps) {
 
     const stored = localStorage.getItem("logindata");
     const loggedInEmail = stored ? JSON.parse(stored).email : "";
+    const creatorName = loggedInEmail ? loggedInEmail.split("@")[0] : "Unknown";
 
     const taskToAdd = {
       id: Date.now().toString(),
@@ -91,7 +92,7 @@ export default function AddTask({ closeModal, addTask }: SubtaskItemProps) {
       dueDate,
       status: "Todo",
       subtasks,
-      owner: loggedInEmail,
+      creator: creatorName,
     };
 
     addTask(taskToAdd);

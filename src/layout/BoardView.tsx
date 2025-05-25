@@ -150,7 +150,7 @@ export default function BoardView({
                 </small>
                 <small style={{ fontStyle: "italic", color: "#555" }}>
                   Created by:
-                  {loginName}
+                  {task.creator || loginName}
                 </small>
 
                 <div className="progress-section">

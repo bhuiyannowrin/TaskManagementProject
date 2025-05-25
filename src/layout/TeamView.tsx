@@ -73,7 +73,6 @@ const TeamView = () => {
   }
 }, []);
 
-
   const getCompletion = (tasks) => {
     const total = tasks.length;
     const done = tasks.filter((t) => t.status === "Done").length;
