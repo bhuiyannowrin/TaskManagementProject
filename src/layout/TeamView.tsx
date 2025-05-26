@@ -6,7 +6,7 @@ const defaultAvatars = [
   "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif",
 ];
 
-const TeamView = () => {
+const TeamView = ({ setSelectedTask }) => {
   const [members, setMembers] = useState([]);
   const [tabs, setTabs] = useState({});
 
@@ -79,7 +79,7 @@ const TeamView = () => {
 
             <Tabs value={tab} onValueChange={(val) => handleTabChange(member.id, val)} className="mt-4">
               <TabsList className="flex justify-between bg-gray-800 rounded-md p-1 mb-2">
-                {["all", "todo", "inprogress", "done"].map((val) => (
+                {["all", "todo", "In Progress", "done"].map((val) => (
                   <TabsTrigger
                     key={val}
                     value={val}
@@ -92,14 +92,14 @@ const TeamView = () => {
                       ? "All"
                       : val === "todo"
                       ? "To Do"
-                      : val === "inprogress"
+                      : val === "In Progress"
                       ? "In Progress"
                       : "Done"}
                   </TabsTrigger>
                 ))}
               </TabsList>
 
-              {["all", "todo", "inprogress", "done"].map((val) => {
+              {["all", "todo", "In Progress", "done"].map((val) => {
                 const filteredTasks =
                   val === "all"
                     ? member.tasks
@@ -115,7 +115,8 @@ const TeamView = () => {
                       filteredTasks.map((task, index) => (
                         <div
                           key={index}
-                          className="bg-(--bg) rounded-lg p-3 mb-2 border border-gray-700"
+                           onClick={() => setSelectedTask(task)} 
+                          className="bg-(--bg) rounded-lg p-3 mb-2 border border-gray-700 cursor-pointer"
                         >
                           <div className="flex justify-between items-center">
                             <h3 className="font-medium">{task.title}</h3>

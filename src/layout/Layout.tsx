@@ -420,7 +420,9 @@ export default function Layout({ onLogout, user }) {
           </TabsContent>
 
           <TabsContent value="team">
-            <TeamView />
+            <TeamView 
+              setSelectedTask={setSelectedTask}
+            />
           </TabsContent>
         </Tabs>
       </div>
