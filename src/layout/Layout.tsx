@@ -223,6 +223,7 @@ export default function Layout({ onLogout, user }) {
                   <span className="badge">{notifications.length}</span>
                 )}
               </button>
+
               {showNotifications && (
                 <div className="notification-panel">
                   <h4>Notifications</h4>
@@ -370,6 +371,7 @@ export default function Layout({ onLogout, user }) {
                 >
                   Sort <FaChevronDown />
                 </button>
+
                 {showSortMenu && (
                   <div className="dropdown-menu">
                     {taskSort.map((opt) => (

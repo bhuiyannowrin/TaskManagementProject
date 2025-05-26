@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import { DragDropContext, Droppable, Draggable, DropResult,
+  ResponderProvided, } from "react-beautiful-dnd";
 import { BiTrash } from "react-icons/bi";
 import { BsGripVertical } from "react-icons/bs";
 import "./AddTask.css";
@@ -43,7 +44,7 @@ export default function EditTask({ closeModal, task, updateTask }) {
     setSubtasks(updated);
   };
 
-  const handleDragEnd = (result) => {
+  const handleDragEnd = (result: DropResult) => {
     if (!result.destination) return;
     const reordered = Array.from(subtasks);
     const [moved] = reordered.splice(result.source.index, 1);
@@ -150,7 +151,7 @@ export default function EditTask({ closeModal, task, updateTask }) {
 
           <DragDropContext onDragEnd={handleDragEnd}>
             <Droppable droppableId="subtasks">
-              {(provided) => (
+              {(provided: ResponderProvided) => (
                 <div
                   className="subtask-list"
                   {...provided.droppableProps}
@@ -161,13 +162,13 @@ export default function EditTask({ closeModal, task, updateTask }) {
                       No subtasks yet. Add one to break down this task.
                     </p>
                   ) : (
-                    subtasks.map((subtask, index) => (
+                    subtasks.map((subtask, index: number) => (
                       <Draggable
                         key={index}
                         draggableId={`subtask-${index}`}
                         index={index}
                       >
-                        {(provided) => (
+                        {(provided: ResponderProvided) => (
                           <div
                             className="subtask-item"
                             ref={provided.innerRef}

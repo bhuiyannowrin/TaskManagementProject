@@ -2,76 +2,34 @@ import React, { useEffect, useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BiCalendarEvent } from "react-icons/bi";
 
-const defaultTeamMembers = [
-  {
-    id: "user1",
-    name: "Alex Johnson",
-    avatar: "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif",
-    tasks: [
-      { title: "Research competitors", status: "Todo", dueDate: "2023-06-15", priority: "M" },
-      { title: "QA testing for v1.0", status: "Review", dueDate: "2023-06-07", priority: "H" },
-    ],
-  },
-  {
-    id: "user2",
-    name: "Sam Taylor",
-    avatar: "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif",
-    tasks: [
-      { title: "Research competitors", status: "Todo", dueDate: "2023-06-15", priority: "L" },
-      { title: "QA testing for v1.0", status: "In Progress", dueDate: "2023-06-07", priority: "H" },
-    ],
-  },
-  {
-    id: "user3",
-    name: "Jamie Smith",
-    avatar: "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif",
-    tasks: [
-      { title: "Research competitors", status: "Todo", dueDate: "2025-06-15", priority: "M" },
-      { title: "QA testing for v1.0", status: "Review", dueDate: "2025-06-07", priority: "H" },
-    ],
-  },
-  {
-    id: "user4",
-    name: "Smith",
-    avatar: "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif",
-    tasks: [
-      { title: "Task 1", status: "In Progress", dueDate: "2025-06-15", priority: "L" },
-    ],
-  },
+const defaultAvatars = [
+  "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif",
 ];
 
 const TeamView = () => {
-  const [members, setMembers] = useState(defaultTeamMembers);
+  const [members, setMembers] = useState([]);
   const [tabs, setTabs] = useState({});
 
   useEffect(() => {
-  const stored = localStorage.getItem("logindata");
-  const userTasks = JSON.parse(localStorage.getItem("loggedUserTasks")) || [];
+    const storedLogin = JSON.parse(localStorage.getItem("logindata"));
+    const storedTasks = JSON.parse(localStorage.getItem("tasks")) || [];
 
-  if (stored) {
-    const user = JSON.parse(stored);
-    const newUser = {
-      id: "loggedin",
-      name: user.email.split("@")[0],
-      avatar: "https://hwchamber.co.uk/wp-content/uploads/2022/04/avatar-placeholder.gif",
-      tasks: userTasks.length
-        ? userTasks
-        : [
-            {
-              title: "Welcome Task",
-              status: "Todo",
-              dueDate: "2025-06-01",
-              priority: "L",
-            },
-          ],
-    };
+    const grouped = storedTasks.reduce((acc, task) => {
+      const creator = task.creator || "Unknown";
+      if (!acc[creator]) acc[creator] = [];
+      acc[creator].push(task);
+      return acc;
+    }, {});
 
-    setMembers((prev) => {
-      const exists = prev.some((m) => m.id === "loggedin");
-      return exists ? prev.map(m => m.id === "loggedin" ? newUser : m) : [newUser, ...prev];
-    });
-  }
-}, []);
+    const formattedMembers = Object.entries(grouped).map(([creator, tasks], idx) => ({
+      id: creator,
+      name: creator,
+      avatar: defaultAvatars[idx % defaultAvatars.length],
+      tasks,
+    }));
+
+    setMembers(formattedMembers);
+  }, []);
 
   const getCompletion = (tasks) => {
     const total = tasks.length;
@@ -100,7 +58,6 @@ const TeamView = () => {
                 alt={member.name}
                 className="w-14 h-14 rounded-full border"
               />
-
               <div>
                 <h2 className="text-lg font-semibold">{member.name}</h2>
                 <p className="text-gray-400 text-sm">{member.tasks.length} tasks</p>

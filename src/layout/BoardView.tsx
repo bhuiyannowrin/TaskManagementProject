@@ -14,13 +14,14 @@ export default function BoardView({
   updateTask,
   loginName,
 }) {
+  
   const [tasks, setTasks] = useState([]);
 
   useEffect(() => {
     setTasks(filteredTasks);
   }, [filteredTasks]);
 
-  const handleDragStart = (e, taskId) => {
+  const handleDragStart = (e, taskId: number) => {
     e.dataTransfer.setData("text/plain", taskId);
   };
 
@@ -94,6 +95,7 @@ export default function BoardView({
                 +
               </button>
             )}
+
           </div>
 
           {tasks
@@ -197,6 +199,7 @@ export default function BoardView({
                     </div>
                   ))}
                 </div>
+
               </div>
             ))}
         </div>

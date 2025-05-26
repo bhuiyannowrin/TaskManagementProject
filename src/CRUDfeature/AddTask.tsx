@@ -1,5 +1,11 @@
 import { useState } from "react";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
+import {
+  DragDropContext,
+  Droppable,
+  Draggable,
+  DropResult,
+  ResponderProvided,
+} from "react-beautiful-dnd";
 import "./AddTask.css";
 import { BiTrash } from "react-icons/bi";
 import { BsGripVertical } from "react-icons/bs";
@@ -60,7 +66,7 @@ export default function AddTask({ closeModal, addTask }: SubtaskItemProps) {
     setSubtasks(updated);
   };
 
-  const handleDragEnd = (result) => {
+  const handleDragEnd = (result: DropResult) => {
     if (!result.destination) return;
     const reordered = Array.from(subtasks);
     const [moved] = reordered.splice(result.source.index, 1);
@@ -97,8 +103,12 @@ export default function AddTask({ closeModal, addTask }: SubtaskItemProps) {
 
     addTask(taskToAdd);
 
-    const existingTasks = JSON.parse(localStorage.getItem("loggedUserTasks")) || [];
-    localStorage.setItem("loggedUserTasks", JSON.stringify([...existingTasks, taskToAdd]));
+    const tasksJSON = localStorage.getItem("loggedUserTasks");
+    const existingTasks = tasksJSON ? JSON.parse(tasksJSON) : [];
+    localStorage.setItem(
+      "loggedUserTasks",
+      JSON.stringify([...existingTasks, taskToAdd])
+    );
 
     closeModal();
   };
@@ -179,12 +189,13 @@ export default function AddTask({ closeModal, addTask }: SubtaskItemProps) {
             <label>Subtasks</label>
             <button className="add-subtask-btn" onClick={handleAddSubtask}>
               + Add Subtask
-            </button>
+            </button>    
+
           </div>
 
           <DragDropContext onDragEnd={handleDragEnd}>
             <Droppable droppableId="subtasks">
-              {(provided) => (
+              {(provided: ResponderProvided) => (
                 <div
                   className="subtask-list"
                   {...provided.droppableProps}
@@ -201,7 +212,7 @@ export default function AddTask({ closeModal, addTask }: SubtaskItemProps) {
                         draggableId={`subtask-${index}`}
                         index={index}
                       >
-                        {(provided) => (
+                        {(provided: ResponderProvided) => (
                           <div
                             className="subtask-item"
                             ref={provided.innerRef}
