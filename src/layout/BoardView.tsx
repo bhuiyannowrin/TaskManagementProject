@@ -95,7 +95,6 @@ export default function BoardView({
                 +
               </button>
             )}
-
           </div>
 
           {tasks
@@ -111,7 +110,7 @@ export default function BoardView({
                 draggable
                 onDragStart={(e) => handleDragStart(e, task.id)}
                 onClick={() => setSelectedTask(task)}
-                style={{ cursor: "grab" }}
+                style={{ cursor: "pointer" }}
               >
                 <div className="flex items-center gap-20">
                   <button
@@ -147,6 +146,7 @@ export default function BoardView({
 
                 <h2>{task.title}</h2>
                 <p>{task.description}</p>
+
                 <small className="flex items-center gap-1">
                   <BiCalendarEvent /> {task.dueDate}
                 </small>
@@ -156,7 +156,8 @@ export default function BoardView({
                 </small>
 
                 <div className="progress-section">
-                  <strong>Progress</strong>
+                  <strong> Progress </strong>        
+
                   <input
                     type="range"
                     min="0"
@@ -198,6 +199,10 @@ export default function BoardView({
                       <FiTag /> {subtask.title}
                     </div>
                   ))}
+                </div>
+
+                <div>
+                  {task.subtasks.map}
                 </div>
 
               </div>

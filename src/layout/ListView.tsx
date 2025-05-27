@@ -21,7 +21,6 @@ export default function ListView({
             <th>Due Date</th>
             <th>Created By </th>
             <th>Progress</th>
-            <th></th>
           </tr>
         </thead>
 
@@ -40,7 +39,7 @@ export default function ListView({
               <tr
                 key={task.id}
                 onClick={() => setSelectedTask(task)}
-                style={{ cursor: "pointer" }}
+                style={{ cursor: "pointer"}}
               >
                 <td>{task.description}</td>
 
