@@ -49,11 +49,6 @@ Task management application built with **React**, **Tailwind CSS**, and **custom
 6. **Notifications:** Receive real-time notifications for task creation, updates, or deletions.  
 7. **Navigation & Filters:** Search tasks, toggle light/dark mode, and use filters/sorting efficiently.
 
-> **Note:** Currently, the app is **front-end only**. All data is handled locally in the browser.
-
-## 💡 Decision Explanation
-This project was developed as a front-end only application to **focus on rapid prototyping and user experience**. By handling all logic in the front-end, the app remains lightweight, fast, and easily installable as a PWA. The core goal was to **test task flows, visual organization, and notifications** without the complexity of a back-end. Future updates may include database integration or server-side support once core functionality is stable.
-
 ## Tech Stack
 - **Frontend:** React
 - **Styling:** Tailwind CSS, Custom CSS
