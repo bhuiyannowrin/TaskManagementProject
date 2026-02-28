@@ -1,9 +1,6 @@
 # Task Management Project
 Task management application built with **React**, **Tailwind CSS**, and **custom CSS**. Designed for both individuals and teams to organize, track, and collaborate on tasks efficiently.
 
-## 🌐 Project Demo
-https://task-management-project-zeta.vercel.app/
-
 ## Features
 - **Task CRUD Operations**
   - Create, duplicate, update, and delete tasks
