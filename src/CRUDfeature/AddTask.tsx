@@ -109,9 +109,9 @@ export default function AddTask({ closeModal, addTask }: SubtaskItemProps) {
       "loggedUserTasks",
       JSON.stringify([...existingTasks, taskToAdd])
     );
-
     closeModal();
   };
+
   return (
     <div className="modal-overlay">
       <div className="modal-container">
@@ -122,7 +122,7 @@ export default function AddTask({ closeModal, addTask }: SubtaskItemProps) {
 
         <div className="form-group">
           <label>
-            Title <span className="text-red-600">*</span>
+            Title <span className="text-red-600"> * </span>
           </label>
           <input
             type="text"
@@ -130,6 +130,7 @@ export default function AddTask({ closeModal, addTask }: SubtaskItemProps) {
             onChange={(e) => setTitle(e.target.value)}
             className="p-2 border border-[#555] rounded-[6px] bg-var(--bg) text-var(--text)"
           />
+
           {formErrors.title && (
             <p className="text-red-600 mt-1 text-left">{formErrors.title}</p>
           )}
@@ -139,11 +140,13 @@ export default function AddTask({ closeModal, addTask }: SubtaskItemProps) {
           <label>
             Description <span className="text-red-600">*</span>
           </label>
+
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             className="p-2 border border-[#555] rounded-[6px] bg-var(--bg) text-var(--text)"
           />
+
           {formErrors.description && (
             <p className="text-red-600 mt-1 text-left">
               {formErrors.description}
@@ -190,7 +193,6 @@ export default function AddTask({ closeModal, addTask }: SubtaskItemProps) {
             <button className="add-subtask-btn" onClick={handleAddSubtask}>
               + Add Subtask
             </button>    
-
           </div>
 
           <DragDropContext onDragEnd={handleDragEnd}>
@@ -249,7 +251,7 @@ export default function AddTask({ closeModal, addTask }: SubtaskItemProps) {
                               onClick={() => removeSubtask(index)}
                               className="delete-subtask-btn"
                             >
-                              <BiTrash className="h-4 w-4" />
+                              <BiTrash className="h-6 w-6" />
                             </button>
                           </div>
                         )}

@@ -23,6 +23,7 @@ function timeAgo(date) {
     { label: "hour", seconds: 3600 },
     { label: "minute", seconds: 60 },
   ];
+
   for (let interval of intervals) {
     const count = Math.floor(seconds / interval.seconds);
     if (count >= 1) {
@@ -79,6 +80,7 @@ export default function TaskDetailModal({ task, onClose, setEditTaskId }) {
     const fileArrayPromises = Array.from(files).map((file) => {
       return new Promise((resolve) => {
         const reader = new FileReader();
+        
         reader.onload = (e) => {
           resolve({
             file: {
@@ -115,7 +117,7 @@ export default function TaskDetailModal({ task, onClose, setEditTaskId }) {
       saveToLocalStorage(updatedComments, uploadedFiles);
     }
   };
-
+  
   const handleEditClick = () => {
     setEditTaskId(task.id);
     onClose();
@@ -131,7 +133,10 @@ export default function TaskDetailModal({ task, onClose, setEditTaskId }) {
   return (
     <div className="modal-overlay">
       <div className="modal-content">
-        <button className="close-btn" onClick={onClose}>×</button>
+        <button className="close-btn" onClick={onClose}>
+          ×
+        </button>
+
         <button className="edit-btn" onClick={handleEditClick}>
           <BiEdit />
         </button>
@@ -146,22 +151,39 @@ export default function TaskDetailModal({ task, onClose, setEditTaskId }) {
           <TabsList className="flex gap-2 w-full justify-start">
             <TabsTrigger value="details">Details</TabsTrigger>
             <TabsTrigger value="comments">
-              Comments {comments.length > 0 && <span className="tab-badge">{comments.length}</span>}
+              Comments
+              {comments.length > 0 && (
+                <span className="tab-badge">({comments.length})</span>
+              )}
             </TabsTrigger>
             <TabsTrigger value="files">
-              Files {uploadedFiles.length > 0 && <span className="tab-badge">{uploadedFiles.length}</span>}
+              Files
+              {uploadedFiles.length > 0 && (
+                <span className="tab-badge">({uploadedFiles.length})</span>
+              )}
             </TabsTrigger>
             <TabsTrigger value="activity">
-              Activity {combinedActivities.length > 0 && <span className="tab-badge">{combinedActivities.length}</span>}
+              Activity
+              {combinedActivities.length > 0 && (
+                <span className="tab-badge">({combinedActivities.length})</span>
+              )}
             </TabsTrigger>
           </TabsList>
 
           <TabsContent value="details">
             <div className="meta-info">
-              <span><BiCalendarEvent /> Due: {task.dueDate}</span>
-              <span><BiUser /> Creator: {task.creator || loginName}</span>
-              <span><BiMessage /> ({comments.length}) comments</span>
-              <span><BiFile /> {uploadedFiles.length} files</span>
+              <span>
+                <BiCalendarEvent /> Due: {task.dueDate}
+              </span>
+              <span>
+                <BiUser /> Creator: {task.creator || loginName}
+              </span>
+              <span>
+                <BiMessage /> {comments.length} comments
+              </span>
+              <span>
+                <BiFile /> {uploadedFiles.length} files
+              </span>
             </div>
 
             <div className="description">
@@ -205,7 +227,9 @@ export default function TaskDetailModal({ task, onClose, setEditTaskId }) {
               <button className="add-comment-btn" onClick={handleAddComment}>
                 Add Comment
               </button>
+
             </div>
+
             {comments.map((comment, idx) => (
               <div className="comment" key={idx}>
                 <div className="comment-author">{comment.author}</div>
@@ -213,6 +237,7 @@ export default function TaskDetailModal({ task, onClose, setEditTaskId }) {
                 <div className="comment-text">{comment.text}</div>
               </div>
             ))}
+
           </TabsContent>
 
           <TabsContent value="files">
@@ -237,7 +262,9 @@ export default function TaskDetailModal({ task, onClose, setEditTaskId }) {
 
               {uploadedFiles.length > 0 && (
                 <>
-                  <h5 className="attachment-heading">Attachments ({uploadedFiles.length})</h5>
+                  <h5 className="attachment-heading">
+                    Attachments ({uploadedFiles.length})
+                  </h5>
                   {uploadedFiles.map((entry, index) => (
                     <div className="file-item" key={index}>
                       <span className="file-name">{entry.file.name}</span>
@@ -270,7 +297,11 @@ export default function TaskDetailModal({ task, onClose, setEditTaskId }) {
                   {combinedActivities.map((item, idx) => (
                     <li key={idx} className="activity-item">
                       <div className="activity-icon">
-                        {item.type === "comment" ? <BiCommentDetail /> : <BiPaperclip />}
+                        {item.type === "comment" ? (
+                          <BiCommentDetail />
+                        ) : (
+                          <BiPaperclip />
+                        )}
                       </div>
                       <div className="activity-details">
                         <div className="avatar-name-row">
@@ -279,7 +310,9 @@ export default function TaskDetailModal({ task, onClose, setEditTaskId }) {
                           </div>
                           <span className="author-name">{item.author}</span>
                         </div>
-                        <div className="activity-time">{timeAgo(item.date)}</div>
+                        <div className="activity-time">
+                          {timeAgo(item.date)}
+                        </div>
                         <div className="activity-text">
                           {item.type === "comment"
                             ? `Commented: ${item.text}`
